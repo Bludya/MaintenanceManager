@@ -1,0 +1,63 @@
+header {
+  position: fixed;
+    top: 0;
+    width: 100%;
+    background: #1ABC9C;
+    text-align: right;
+}
+
+.logo, .header {
+    font-size: 2.5em;
+}
+
+#profile {
+    display: inline-block;
+    background: #ffffff;
+    text-align: right;
+    vertical-align: bottom;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#profile span {
+    padding: 5px 10px;
+}
+
+#profile a {
+    display: inline-block;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+#profile a:hover {
+    color: #000000;
+}
+
+#header {
+    display: inline;
+    margin: 15px;
+    width: 200px;
+}
+
+.home-button {
+  float:left;
+  width: 30px;
+  text-align: center;
+  margin-left: 20px;
+}
+
+.nav {
+    font-size: 1.25em;
+    display:inline-block;
+    text-decoration: none;
+    padding: 15px 10px;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+.nav:hover {
+    color: #000000;
+}

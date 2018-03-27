@@ -5,15 +5,15 @@ import org.softuni.maintenancemanager.auth.model.dtos.binding.UserFullModel;
 import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
 import org.softuni.maintenancemanager.auth.model.entity.Role;
 import org.softuni.maintenancemanager.auth.model.entity.User;
+import org.softuni.maintenancemanager.auth.model.repositories.UserRepository;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
-import org.softuni.maintenancemanager.auth.service.repositories.UserRepository;
 import org.softuni.maintenancemanager.utils.CharacterEscapes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.FieldError;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,31 +48,33 @@ public class UserServiceImpl implements UserService {
 
     //Returns null if everything is fine or object error.
     @Override
-    public ObjectError register(UserFullModel userDto) {
+    public FieldError register(UserFullModel userDto) {
         userDto = CharacterEscapes.escapeStringFields(userDto);
+
+        if(this.userExists(userDto.getEmail())){
+            System.out.println("qweqwqweqweqwe");
+            return new FieldError("userDto", "email", USER_EXISTS_MESSAGE);
+        }
 
         User user = modelMapper.map(userDto, User.class);
         user.setPassword(this.bCryptPasswordEncoder.encode(userDto.getPassword()));
 
-        if(this.userExists(userDto.getUsername())){
-            return new ObjectError("email", USER_EXISTS_MESSAGE);
-        }
         try {
             usersRepository.save(user);
             return null;
         }catch (Exception e){
-            return new ObjectError("exception", SERVER_SIDE_ERROR_MESSAGE);
+            return new FieldError("userDto", "exception", SERVER_SIDE_ERROR_MESSAGE);
         }
     }
 
     @Override
-    public boolean userExists(String username) {
-        return this.usersRepository.existsByUsername(username);
+    public boolean userExists(String email) {
+        return this.usersRepository.existsByEmail(email);
     }
 
     @Override
-    public boolean userExists(String username, String id) {
-       return this.usersRepository.existsByUsernameAndIdNot(username, id);
+    public boolean userExists(String email, String id) {
+       return this.usersRepository.existsByEmailAndIdNot(email, id);
     }
 
     @Override
@@ -97,11 +99,11 @@ public class UserServiceImpl implements UserService {
 
     //Returns null if everything is fine or object error.
     @Override
-    public ObjectError edit(UserFullModel userDto, String id) {
+    public FieldError edit(UserFullModel userDto, String id) {
         Optional<User> optionalUser = this.usersRepository.findById(id);
 
         if(!optionalUser.isPresent()){
-            return new ObjectError("exception", USER_NOT_EXISTS_MESSAGE);
+            return new FieldError("userDto","exception", USER_NOT_EXISTS_MESSAGE);
         }
 
         User user = optionalUser.get();
@@ -130,13 +132,13 @@ public class UserServiceImpl implements UserService {
         return userViewModel;
     }
 
-    public ObjectError deactivateUser(String id){
+    public FieldError deactivateUser(String id){
         //TODO: option to deactivate user;
-        return new ObjectError("exception","not implemented yet");
+        return new FieldError("userDto", "exception","not implemented yet");
     }
 
-    public ObjectError delete(String id){
+    public FieldError delete(String id){
         //TODO: option to delete user;
-        return new ObjectError("exception","not implemented yet");
+        return new FieldError("userDto", "exception","not implemented yet");
     }
 }

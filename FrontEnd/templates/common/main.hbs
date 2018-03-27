@@ -1,0 +1,12 @@
+<div id="container">
+    <div class="content">
+      {{#if loggedIn}}
+        {{> menu}}
+      {{else}}
+      {{/if}}
+      {{> page}}
+    </div>
+  {{> header}}
+  {{> footer}}
+{{> notifications}}
+</div>

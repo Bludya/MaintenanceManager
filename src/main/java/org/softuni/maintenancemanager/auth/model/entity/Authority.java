@@ -1,27 +1,22 @@
 package org.softuni.maintenancemanager.auth.model.entity;
 
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Authority implements GrantedAuthority {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    private Long id;
 
     @Column(name = "authority", unique = true)
     private String authority;
+
+    @ManyToMany(mappedBy = "authorities")
+    private Set<Role> roles;
 
     public Authority() {
     }

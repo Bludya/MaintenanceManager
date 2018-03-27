@@ -1,7 +1,5 @@
 package org.softuni.maintenancemanager.auth.model.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.Set;
@@ -10,14 +8,9 @@ import java.util.Set;
 public class Role {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    private Long id;
 
     @Column(name = "role_name")
     private String roleName;
@@ -25,7 +18,7 @@ public class Role {
     @Column(name = "comment")
     private String comment;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
     @ManyToMany(fetch = FetchType.EAGER )
