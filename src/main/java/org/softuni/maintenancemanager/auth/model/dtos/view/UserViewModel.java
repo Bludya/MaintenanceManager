@@ -100,4 +100,6 @@ public class UserViewModel {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
+
+
 }

@@ -8,7 +8,7 @@ import org.springframework.validation.FieldError;
 import java.util.List;
 
 public interface UserService extends UserDetailsService {
-    FieldError register(UserFullModel userDto);
+    Object register(UserFullModel userDto);
 
     boolean userExists(String username);
 
@@ -18,9 +18,11 @@ public interface UserService extends UserDetailsService {
 
     UserViewModel getById(String id);
 
-    FieldError edit(UserFullModel userDTO, String id);
+    FieldError edit(String editor, UserFullModel userDTO, String id);
 
-    FieldError deactivateUser(String id);
+    FieldError deactivateUser(String editor, String id);
 
-    FieldError delete(String id);
+    FieldError activateUser(String editor, String id);
+
+    FieldError delete(String editor, String id);
 }

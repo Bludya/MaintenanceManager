@@ -7,6 +7,7 @@ import org.softuni.maintenancemanager.auth.model.entity.Role;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.auth.model.repositories.UserRepository;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
+import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
 import org.softuni.maintenancemanager.utils.CharacterEscapes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,23 +37,26 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository usersRepository;
 
+    private LogService logService;
+
     @Autowired
     public UserServiceImpl(
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper modelMapper,
-            UserRepository usersRepository) {
+            UserRepository usersRepository,
+            LogService logService) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
         this.usersRepository = usersRepository;
+        this.logService = logService;
     }
 
     //Returns null if everything is fine or object error.
     @Override
-    public FieldError register(UserFullModel userDto) {
+    public Object register(UserFullModel userDto) {
         userDto = CharacterEscapes.escapeStringFields(userDto);
 
         if(this.userExists(userDto.getEmail())){
-            System.out.println("qweqwqweqweqwe");
             return new FieldError("userDto", "email", USER_EXISTS_MESSAGE);
         }
 
@@ -61,7 +65,8 @@ public class UserServiceImpl implements UserService {
 
         try {
             usersRepository.save(user);
-            return null;
+            logService.addLog(user.getUsername(), "User created");
+            return userDto;
         }catch (Exception e){
             return new FieldError("userDto", "exception", SERVER_SIDE_ERROR_MESSAGE);
         }
@@ -99,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
     //Returns null if everything is fine or object error.
     @Override
-    public FieldError edit(UserFullModel userDto, String id) {
+    public FieldError edit(String editor, UserFullModel userDto, String id) {
         Optional<User> optionalUser = this.usersRepository.findById(id);
 
         if(!optionalUser.isPresent()){
@@ -111,13 +116,19 @@ public class UserServiceImpl implements UserService {
         modelMapper.map(userDto, user);
         usersRepository.save(user);
 
+        logService.addLog(editor, "Editted user " + user.getUsername());
         return null;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        username = CharacterEscapes.escapeString(username);
-        return this.usersRepository.findByUsernameEquals(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        email = CharacterEscapes.escapeString(email);
+        User user = this.usersRepository.getByEmail(email);
+        if(user == null){
+            throw new UsernameNotFoundException("User doesn't exist");
+        }
+
+        return user;
     }
 
     private UserViewModel mapUserViewModel(User user){
@@ -132,12 +143,17 @@ public class UserServiceImpl implements UserService {
         return userViewModel;
     }
 
-    public FieldError deactivateUser(String id){
+    public FieldError deactivateUser(String editor, String id){
         //TODO: option to deactivate user;
         return new FieldError("userDto", "exception","not implemented yet");
     }
 
-    public FieldError delete(String id){
+    public FieldError activateUser(String editor, String id){
+        //TODO: option to deactivate user;
+        return new FieldError("userDto", "exception","not implemented yet");
+    }
+
+    public FieldError delete(String editor, String id){
         //TODO: option to delete user;
         return new FieldError("userDto", "exception","not implemented yet");
     }

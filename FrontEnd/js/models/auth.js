@@ -10,10 +10,11 @@ let auth = (() => {
     }
 
     // user/login
-    function login(username, password) {
+    function login(email, password, remember) {
         let userData = {
-            username,
-            password
+            email: email,
+            password: password,
+            remember: remember
         };
 
         return requester.post('users', 'login', userData);
@@ -26,7 +27,7 @@ let auth = (() => {
           email: email,
           password: password,
           repeatPassword: repeatPassword};
-          
+
         return requester.post('users', 'register', userData);
     }
 

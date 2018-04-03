@@ -2,12 +2,16 @@
   <form id="loginForm" action="#/login" method="post">
     <h2>Your credentials</h2>
     <div class="form-group">
-      <label>Username:</label>
-      <input name="username" type="text"/>
+      <label>Email:</label>
+      <input name="email" type="text"/>
     </div>
     <div class="form-group">
       <label>Password:</label>
       <input name="password" type="password"/>
+    </div>
+    <div class="remember-me">
+      <input name="remember" value="on" type="checkbox"/>
+      <label>Remember me</label>
     </div>
     <input class="form-button" id="btnLogin" value="Login" type="submit"/>
   </form>

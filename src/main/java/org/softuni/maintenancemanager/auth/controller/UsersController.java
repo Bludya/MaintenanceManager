@@ -28,9 +28,15 @@ public class UsersController {
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute UserFullModel userDto,
                                       BindingResult bindingResult){
-        if(!bindingResult.hasErrors()){
-            bindingResult.addError(this.userService.register(userDto));
+        if(!bindingResult.hasErrors()) {
+            Object result = this.userService.register(userDto);
+            if (result instanceof FieldError) {
+                bindingResult.addError((FieldError) result);
+            }else {
+                return result;
+            }
         }
+
 
         if(bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -43,4 +49,5 @@ public class UsersController {
 
         return "Successful registration.";
     }
+
 }

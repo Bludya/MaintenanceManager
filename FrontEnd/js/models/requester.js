@@ -1,10 +1,11 @@
 let requester = (() => {
-    const serverBaseUrl = "http://localhost:8080/"
+    const serverBaseUrl = "http://localhost:8000/"
 
     // Creates request object to kinvey
     function makeRequest(method, module, endpoint) {
         return req = {
             method,
+            dataType: 'json',
             url: serverBaseUrl + module + '/' + endpoint
         };
     }

@@ -17,7 +17,8 @@ $(() => {
     this.post('#/register', function (ctx){
       let {username, email, password, repeatPassword} = this.params;
       let english = /^[A-Za-z]*$/;
-      let englishAndLetters = /^[A-Za-z0-9]*$/;
+      let englishAndNumbers = /^[A-Za-z0-9]*$/;
+      let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
       if(!english.test(username)){
         auth.showError('Username should be english alphabet only.')
@@ -29,8 +30,13 @@ $(() => {
         return;
       }
 
-      if(!englishAndLetters.test(password)){
+      if(!englishAndNumbers.test(password)){
         auth.showError('Password should be only english alphabet and letters.')
+        return;
+      }
+
+      if(!emailRegex.test(email)){
+        auth.showError('Email is invalid.')
         return;
       }
 
@@ -44,44 +50,38 @@ $(() => {
         return;
       }
 
+
       auth.register(username, email, password, repeatPassword)
-        .then(function (data){
-          ctx.redirect('#/login');
-          setTimeout(() => auth.showInfo("Registration successful!"), 500);
-        }).catch(function (err){
-          auth.showError(JSON.parse(err.responseText).description);
-        })
+        .always(function( jqXHR, textStatus, errorThrown ) { console.log(textStatus); });
+    //     .then(function (data){
+    //       console.log("here");
+    //       ctx.redirect('#/login');
+    //       setTimeout(() => auth.showInfo("Registration successful!"), 500);
+    //     }).catch(function (err){
+    //       auth.showError(JSON.parse(err.responseText).description);
+    //     })
     })
 
     this.post('#/login', function (ctx){
-      let {username, password} = this.params;
-      let english = /^[A-Za-z]*$/;
-      let englishAndLetters = /^[A-Za-z0-9]*$/;
+      let {email, password,remember} = this.params;
+      let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      let englishAndNumbers = /^[A-Za-z0-9]*$/;
 
-      if(!english.test(username)){
-        auth.showError('Username should be english alphabet only.')
+      if(!emailRegex.test(email)){
+        auth.showError('Email is invalid.')
         return;
       }
 
-      if(username.length < 3){
-        auth.showError('Username should be at least 3 characters long.')
+      if(!englishAndNumbers.test(password) || password.length < 6){
+        auth.showError('Password is invalid.')
         return;
       }
 
-      if(!englishAndLetters.test(password)){
-        auth.showError('Password should be only english alphabet and letters.')
-        return;
-      }
-
-      if(password.length < 6){
-        auth.showError('Password should be at least 6 characters long.')
-        return;
-      }
-
-      auth.login(username, password)
-        .then(function (data){
-          auth.saveSession(data);
-          ctx.redirect('#/catalog');
+      auth.login(email, password, remember)
+        .always(function (data){
+          //auth.saveSession(data);
+          console.log(data);
+          ctx.redirect('#');
           setTimeout(() => auth.showInfo("Login successful!"), 500);
         }).catch(function (err){
           auth.showError(JSON.parse(err.responseText).description);

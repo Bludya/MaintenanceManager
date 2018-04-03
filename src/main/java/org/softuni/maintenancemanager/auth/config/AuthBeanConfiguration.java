@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
 public class AuthBeanConfiguration {
@@ -14,7 +15,16 @@ public class AuthBeanConfiguration {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler(){
+        return new MySavedRequestAwareAuthenticationSuccessHandler();
+    }
+    @Bean
+    public SimpleUrlAuthenticationFailureHandler myFailureHandler(){
+        return new SimpleUrlAuthenticationFailureHandler();
     }
 }
