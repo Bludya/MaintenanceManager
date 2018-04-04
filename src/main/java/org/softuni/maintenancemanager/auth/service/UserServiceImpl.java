@@ -102,6 +102,13 @@ public class UserServiceImpl implements UserService {
         return this.mapUserViewModel(optionalUser.get());
     }
 
+    @Override
+    public UserViewModel getByUsername(String username){
+        User user = this.usersRepository.getByUsername(username);
+
+        return this.mapUserViewModel(user);
+    }
+
     //Returns null if everything is fine or object error.
     @Override
     public FieldError edit(String editor, UserFullModel userDto, String id) {

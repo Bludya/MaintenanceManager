@@ -18,6 +18,8 @@ public interface UserService extends UserDetailsService {
 
     UserViewModel getById(String id);
 
+    UserViewModel getByUsername(String username);
+
     FieldError edit(String editor, UserFullModel userDTO, String id);
 
     FieldError deactivateUser(String editor, String id);
