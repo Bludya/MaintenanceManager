@@ -1,36 +1,17 @@
 package org.softuni.maintenancemanager.logger.model.dtos.view;
 
+import org.softuni.maintenancemanager.logger.model.entity.Log;
+import org.springframework.data.rest.core.config.Projection;
+
 import java.util.Date;
 
-public class LogViewModel {
+@Projection(types = Log.class, name = "logViewModel")
+public interface LogViewModel {
 
-    private String user;
+    String getUser();
 
-    private String activity;
+    String getActivity();
 
-    private Date timeOfOccurrence;
+    Date getTimeOfOccurrence();
 
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public String getActivity() {
-        return activity;
-    }
-
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
-
-    public Date getTimeOfOccurrence() {
-        return timeOfOccurrence;
-    }
-
-    public void setTimeOfOccurrence(Date timeOfOccurrence) {
-        this.timeOfOccurrence = timeOfOccurrence;
-    }
 }
