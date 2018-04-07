@@ -4,6 +4,7 @@ import org.softuni.maintenancemanager.auth.model.dtos.binding.UserFullModel;
 import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -54,9 +55,35 @@ public class UsersController {
         return this.userService.getById(id);
     }
 
-    @GetMapping("/all")
-    public Object allUsers(){
-        return this.userService.getAll();
+    @PostMapping("/all")
+    public Object allUsers(@RequestParam(required = false) String searchWord){
+        if(searchWord == null){
+            searchWord = "";
+        }
+        return this.userService.getAllBySearchWordOrderedByActive(searchWord);
     }
 
+    @PostMapping("activate")
+    public Object activateUser(@RequestParam String id,
+                               Authentication authentication){
+//        User user = (User)authentication.getPrincipal();
+
+        return this.userService.activateUser("valio", id);
+    }
+
+    @PostMapping("deactivate")
+    public Object deactivateUser(@RequestParam String id,
+                               Authentication authentication){
+//        User user = (User)authentication.getPrincipal();
+
+        return this.userService.deactivateUser("valio", id);
+    }
+
+    @PostMapping("delete")
+    public Object deleteUser(@RequestParam String id,
+                                 Authentication authentication){
+//        User user = (User)authentication.getPrincipal();
+
+        return this.userService.delete("valio", id);
+    }
 }

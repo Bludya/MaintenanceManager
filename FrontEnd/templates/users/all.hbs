@@ -1,0 +1,41 @@
+<section id="viewUsers" class="bigView">
+      <div class="">
+        <form class="search-bar" action="#/users" method="post">
+           <input type="text" name="searchWord" id="searchWord"/>
+           <input type="submit"  class="form-button" value="Search"/>
+        </form>
+        <table class="table table-striped table-hover table-condensed">
+          <thead class="thead-dark">
+            <tr>
+              <th>Email</th>
+              <th>Username</th>
+              <th>Active</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each users}}
+            {{#if isNotMe}}
+              <tr>
+                <td>{{email}}</td>
+                <td>{{username}}</td>
+                <td>{{enabled}}</td>
+                <td>{{roles}}</td>
+                <td>
+                  <div class="buttons">
+                  {{#if enabled}}
+                    <a href="#/users/deactivate/{{id}}" class="button">Deactivate</a>
+                  {{else}}
+                    <a href="#/users/activate/{{id}}" class="button">Activate</a>
+                  {{/if}}
+                    <a href="#/users/delete/{{id}}" class="button">Delete</a>
+                  </div>
+                </td>
+              </tr>
+              {{/if}}
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+</section>

@@ -144,6 +144,10 @@ public class User implements UserDetails{
         isCredentialsNonExpired = credentialsNonExpired;
     }
 
+    public boolean getEnabled(){
+        return this.isEnabled;
+    }
+
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }

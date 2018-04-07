@@ -22,9 +22,11 @@ public interface UserService extends UserDetailsService {
 
     FieldError edit(String editor, UserFullModel userDTO, String id);
 
-    FieldError deactivateUser(String editor, String id);
+    boolean deactivateUser(String editor, String id);
 
-    FieldError activateUser(String editor, String id);
+    boolean activateUser(String editor, String id);
 
-    FieldError delete(String editor, String id);
+    boolean delete(String editor, String id);
+
+    List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord);
 }

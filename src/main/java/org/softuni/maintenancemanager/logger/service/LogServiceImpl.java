@@ -1,8 +1,8 @@
 package org.softuni.maintenancemanager.logger.service;
 
 import org.softuni.maintenancemanager.logger.model.entity.Log;
+import org.softuni.maintenancemanager.logger.model.repositories.LogRepository;
 import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
-import org.softuni.maintenancemanager.logger.service.repositories.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

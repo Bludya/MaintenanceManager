@@ -1,0 +1,13 @@
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {{#if notFirstPage}}
+    <li class="page-item"><a class="page-link" href="#/logs?page={{prevPage}}">&lt;&lt;</a></li>
+    {{/if}}
+    <li class="page-item"><a class="page-link" href="#/logs?page={{first}}">{{first}}</a></li>
+    <li class="page-item"><a class="page-link" href="#/logs?page={{second}}">{{second}}</a></li>
+    <li class="page-item"><a class="page-link" href="#/logs?page={{third}}">{{third}}</a></li>
+    {{#if notLastPage}}
+    <li class="page-item"><a class="page-link" href="#/logs?page={{nextPage}}">&gt;&gt;</a></li>
+    {{/if}}
+  </ul>
+</nav>

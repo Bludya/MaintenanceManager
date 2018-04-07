@@ -54,7 +54,6 @@ public class UserServiceImpl implements UserService {
     //Returns null if everything is fine or object error.
     @Override
     public Object register(UserFullModel userDto) {
-        userDto = CharacterEscapes.escapeStringFields(userDto);
 
         if(this.userExists(userDto.getEmail())){
             return new FieldError("userDto", "email", USER_EXISTS_MESSAGE);
@@ -150,18 +149,50 @@ public class UserServiceImpl implements UserService {
         return userViewModel;
     }
 
-    public FieldError deactivateUser(String editor, String id){
-        //TODO: option to deactivate user;
-        return new FieldError("userDto", "exception","not implemented yet");
+    public boolean deactivateUser(String editor, String id){
+        Optional<User> optionalUser = this.usersRepository.findById(id);
+
+        if(!optionalUser.isPresent()){
+            return false;
+        }
+
+        User user = optionalUser.get();
+        user.setEnabled(false);
+        usersRepository.save(user);
+        logService.addLog(editor, "Deactivated user with id: " + id);
+        return true;
     }
 
-    public FieldError activateUser(String editor, String id){
-        //TODO: option to deactivate user;
-        return new FieldError("userDto", "exception","not implemented yet");
+    public boolean activateUser(String editor, String id){
+        Optional<User> optionalUser = this.usersRepository.findById(id);
+
+        if(!optionalUser.isPresent()){
+            return false;
+        }
+
+        User user = optionalUser.get();
+        user.setEnabled(true);
+        usersRepository.save(user);
+        logService.addLog(editor, "Activated user with id: " + id);
+        return true;
     }
 
-    public FieldError delete(String editor, String id){
-        //TODO: option to delete user;
-        return new FieldError("userDto", "exception","not implemented yet");
+    public boolean delete(String editor, String id){
+        if(!usersRepository.existsById(id)){
+            return false;
+        }
+
+        usersRepository.deleteById(id);
+        logService.addLog(editor, "Deleted user with id: " + id);
+        return true;
     }
+
+    @Override
+    public List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord) {
+        return StreamSupport
+                .stream(this.usersRepository.findAllByUsernameContainsOrEmailContains(searchWord, searchWord).spliterator(), false)
+                .map(this::mapUserViewModel)
+                .collect(Collectors.toList());
+    }
+
 }
