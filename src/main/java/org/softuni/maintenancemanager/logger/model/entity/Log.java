@@ -15,7 +15,6 @@ public class Log {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 

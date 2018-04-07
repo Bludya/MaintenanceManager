@@ -1,6 +1,7 @@
 package org.softuni.maintenancemanager.auth.model.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.softuni.maintenancemanager.projects.model.entity.Project;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,7 +26,7 @@ public class User implements UserDetails{
     @Column(name = "id", updatable = false, nullable = false)
     private String id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "email", unique = true)
@@ -48,6 +49,9 @@ public class User implements UserDetails{
 
     @Column(name = "is_enabled")
     private boolean isEnabled;
+
+    @OneToMany(mappedBy = "manager")
+    private Set<Project> projects;
 
     @ManyToMany(fetch = FetchType.EAGER )
     @JoinTable(
@@ -162,5 +166,13 @@ public class User implements UserDetails{
 
     public void addRole(Role role){
         this.roles.add(role);
+    }
+
+    public Set<Project> getProjects() {
+        return Collections.unmodifiableSet(this.projects);
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 }
