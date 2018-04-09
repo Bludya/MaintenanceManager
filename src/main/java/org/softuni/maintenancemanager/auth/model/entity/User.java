@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails{
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -53,7 +53,7 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "manager")
     private Set<Project> projects;
 
-    @ManyToMany(fetch = FetchType.EAGER )
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -121,9 +121,17 @@ public class User implements UserDetails{
         return this.isAccountNonExpired;
     }
 
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        isAccountNonExpired = accountNonExpired;
+    }
+
     @Override
     public boolean isAccountNonLocked() {
         return this.isAccountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
     }
 
     @Override
@@ -131,24 +139,16 @@ public class User implements UserDetails{
         return this.isCredentialsNonExpired;
     }
 
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
     @Override
     public boolean isEnabled() {
         return this.isEnabled;
     }
 
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        isAccountNonExpired = accountNonExpired;
-    }
-
-    public void setAccountNonLocked(boolean accountNonLocked) {
-        isAccountNonLocked = accountNonLocked;
-    }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
-        isCredentialsNonExpired = credentialsNonExpired;
-    }
-
-    public boolean getEnabled(){
+    public boolean getEnabled() {
         return this.isEnabled;
     }
 
@@ -156,15 +156,15 @@ public class User implements UserDetails{
         isEnabled = enabled;
     }
 
-    public void setRoles(Set<Role> roles) {
-            this.roles = roles;
-    }
-
     public Set<Role> getRoles() {
         return roles;
     }
 
-    public void addRole(Role role){
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(Role role) {
         this.roles.add(role);
     }
 

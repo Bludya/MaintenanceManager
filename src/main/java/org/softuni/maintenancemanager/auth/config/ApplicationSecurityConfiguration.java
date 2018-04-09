@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @EnableWebSecurity
 @CrossOrigin(origins = "http://localhost:8080")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 

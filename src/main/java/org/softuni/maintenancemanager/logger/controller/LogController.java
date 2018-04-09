@@ -16,7 +16,7 @@ public class LogController {
     }
 
     @PostMapping("/all")
-    public Object allLogs(@RequestParam(required = false) String searchWord){
+    public Object allLogs(@RequestParam(required = false) String searchWord) {
         return this.logRepository.findAll();
     }
 }

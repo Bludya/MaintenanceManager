@@ -1,4 +1,4 @@
-package org.softuni.maintenancemanager.utils;
+package org.softuni.maintenancemanager.appUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

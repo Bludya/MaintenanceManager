@@ -1,21 +1,22 @@
-package org.softuni.maintenancemanager.projects.model.entity;
+package org.softuni.maintenancemanager.tickets.model.entity;
 
-import org.hibernate.annotations.GenericGenerator;
+import org.softuni.maintenancemanager.auth.model.entity.User;
+import org.softuni.maintenancemanager.notes.model.entity.Note;
+import org.softuni.maintenancemanager.projects.model.entity.Project;
+import org.softuni.maintenancemanager.tasks.model.entity.Task;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "tickets")
 public class Ticket {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    private Long id;
 
     @Column(name = "ticket_text")
     private String ticket_text;
@@ -35,7 +36,20 @@ public class Ticket {
     @ManyToOne
     private Project project;
 
+    @OneToMany(mappedBy = "ticket")
+    private Set<Task> tasks;
+
+    @OneToMany
+    private Set<Note> notes;
+
+    @ManyToOne
+    private User author;
+
     public Ticket() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTicket_text() {
@@ -84,5 +98,29 @@ public class Ticket {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Set<Task> getTasks() {
+        return Collections.unmodifiableSet(this.tasks);
+    }
+
+    public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public Set<Note> getNotes() {
+        return Collections.unmodifiableSet(this.notes);
+    }
+
+    public void setNotes(Set<Note> notes) {
+        this.notes = notes;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }

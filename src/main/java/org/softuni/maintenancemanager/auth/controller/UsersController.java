@@ -27,18 +27,18 @@ public class UsersController {
 
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute UserFullModel userDto,
-                                      BindingResult bindingResult){
-        if(!bindingResult.hasErrors()) {
+                           BindingResult bindingResult) {
+        if (!bindingResult.hasErrors()) {
             Object result = this.userService.register(userDto);
             if (result instanceof FieldError) {
                 bindingResult.addError((FieldError) result);
-            }else {
+            } else {
                 return result;
             }
         }
 
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
 
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -51,39 +51,39 @@ public class UsersController {
     }
 
     @PostMapping("/profile")
-    public UserViewModel profile(@RequestParam String id){
+    public UserViewModel profile(@RequestParam String id) {
         return this.userService.getById(id);
     }
 
     @PostMapping("/all")
-    public Object allUsers(@RequestParam(required = false) String searchWord){
-        if(searchWord == null){
+    public Object allUsers(@RequestParam(required = false) String searchWord) {
+        if (searchWord == null) {
             searchWord = "";
         }
         return this.userService.getAllBySearchWordOrderedByActive(searchWord);
     }
 
-    @PostMapping("activate")
+    @PostMapping("/activate")
     public Object activateUser(@RequestParam String id,
-                               Authentication authentication){
+                               Authentication authentication) {
 //        User user = (User)authentication.getPrincipal();
 
         return this.userService.activateUser("valio", id);
     }
 
-    @PostMapping("deactivate")
+    @PostMapping("/deactivate")
     public Object deactivateUser(@RequestParam String id,
-                               Authentication authentication){
+                                 Authentication authentication) {
 //        User user = (User)authentication.getPrincipal();
 
         return this.userService.deactivateUser("valio", id);
     }
 
-    @PostMapping("delete")
-    public Object deleteUser(@RequestParam String id,
-                                 Authentication authentication){
-//        User user = (User)authentication.getPrincipal();
+    @DeleteMapping("/delete")
+    public void deleteUser(@RequestParam String id,
+                           Authentication authentication) {
+//       authentication.getName()
 
-        return this.userService.delete("valio", id);
+        this.userService.delete("valio", id);
     }
 }

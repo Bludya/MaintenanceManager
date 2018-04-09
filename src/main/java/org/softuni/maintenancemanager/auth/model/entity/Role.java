@@ -21,7 +21,7 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    @ManyToMany(fetch = FetchType.EAGER )
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "roles_authorities",
             joinColumns = {@JoinColumn(name = "role_id")},
@@ -36,12 +36,16 @@ public class Role {
         return Collections.unmodifiableSet(this.authorities);
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 
     public String getRoleName() {
         return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Set<User> getUsers() {
@@ -60,11 +64,7 @@ public class Role {
         this.comment = comment;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
-        this.authorities = authorities;
-    }
-
-    public void addAuthority(Authority authority){
+    public void addAuthority(Authority authority) {
         this.authorities.add(authority);
     }
 }

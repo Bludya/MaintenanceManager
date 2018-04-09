@@ -1,22 +1,16 @@
 package org.softuni.maintenancemanager.projects.model.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.Set;
 
 @Entity
-@Table(name = "systems")
-public class System {
+@Table(name = "projectSystems")
+public class ProjectSystem {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
-    private String id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -27,7 +21,11 @@ public class System {
     @ManyToMany(mappedBy = "systems")
     private Set<Project> projects;
 
-    public System() {
+    public ProjectSystem() {
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

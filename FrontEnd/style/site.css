@@ -3,32 +3,30 @@
     margin: 0;
 }
 
-a, a:hover{
+a, a:hover {
     text-decoration: none;
 }
 
-a.button{
+a.button {
 
 }
-
 
 div {
-  text-align: center;
+    text-align: center;
 }
 
-a,button, li {
-  font-weight: bold;
-  color: #ffffff;
+a, button, li {
+    font-weight: bold;
+    color: #ffffff;
 }
-
 
 footer {
-  position: fixed;
-  bottom: 0;
-  text-align: center;
-  width: 100%;
-  padding: 10px 0;
-  background: #1ABC9C;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+    background: #1ABC9C;
 }
 
 .container {
@@ -36,24 +34,26 @@ footer {
     height: 100%;
 }
 
-section{
-  position: absolute;
-      top: 0%;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: inherit;
-      height: 40%;
-      margin: auto;
-      padding: 0 100px;
+section {
+    position: absolute;
+    top: 0%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: inherit;
+    height: 40%;
+    margin: auto;
+    padding: 0 100px;
 }
 
-.bigView{
-      height: 70%;
+.bigView {
+    height: 70%;
 }
-tr{
-  border-bottom: 2px;
+
+tr {
+    border-bottom: 2px;
 }
+
 .about {
     background: #ddf9c0;
     padding: 20px;
@@ -80,57 +80,54 @@ form {
     text-align: right;
 }
 
-
-
 input {
-  float: right;
-  margin: 0 10px;
+    float: right;
+    margin: 0 10px;
 }
 
-.search-bar input{
-  float: none;
+.search-bar input {
+    float: none;
 }
 
-.remember-me input{
-  float: none;
-  margin: 0 0 10px 0;
+.remember-me input {
+    float: none;
+    margin: 0 0 10px 0;
 }
 
 .form-button {
-  float: none;
-  height: 40px;
-  width: 100px;
-  font-size: 1.1em;
-  border-radius: 10px;
-  border-style: none;
+    float: none;
+    height: 40px;
+    width: 100px;
+    font-size: 1.1em;
+    border-radius: 10px;
+    border-style: none;
 }
-
 
 .welcome > a {
-  padding: 10px;
+    padding: 10px;
 }
 
-th{
-  text-align: center;
+th {
+    text-align: center;
 }
 
-.btnLogin, .btnRegister, a.button{
-  padding: 10px 10px;
-  margin: 10px auto;
-  border-radius: 5px;
-  border-style: none;
-  background: #1ABC9C;
-  font-weight: bold;
-  width: 100px;
-  height: 40px;
+.btnLogin, .btnRegister, a.button {
+    padding: 10px 10px;
+    margin: 10px auto;
+    border-radius: 5px;
+    border-style: none;
+    background: #1ABC9C;
+    font-weight: bold;
+    width: 100px;
+    height: 40px;
 }
 
-#viewUsers .buttons{
-  margin: 0 auto;
-  width: 250px;
+#viewUsers .buttons {
+    margin: 0 auto;
+    width: 250px;
 }
 
-#viewUsers .button{
-  display: inline-block;
-  margin: 0 10px 0 10px;
+#viewUsers .button {
+    display: inline-block;
+    margin: 0 10px 0 10px;
 }

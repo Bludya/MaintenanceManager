@@ -31,7 +31,7 @@ public class LogServiceImpl implements LogService {
 
     @Override
     public Set<Log> getAllLogs() {
-        return (Set<Log>)this.logRepository.findAll();
+        return (Set<Log>) this.logRepository.findAll();
     }
 
     @Override

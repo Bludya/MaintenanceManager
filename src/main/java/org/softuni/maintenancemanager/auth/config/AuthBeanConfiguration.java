@@ -10,21 +10,22 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 public class AuthBeanConfiguration {
 
     @Bean
-    public ModelMapper modelMapper(){
+    public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler(){
+    public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler() {
         return new MySavedRequestAwareAuthenticationSuccessHandler();
     }
+
     @Bean
-    public SimpleUrlAuthenticationFailureHandler myFailureHandler(){
+    public SimpleUrlAuthenticationFailureHandler myFailureHandler() {
         return new SimpleUrlAuthenticationFailureHandler();
     }
 }
