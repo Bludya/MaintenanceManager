@@ -1,5 +1,5 @@
 header {
-    position: fixed;
+   position: fixed;
     top: 0;
     width: 100%;
     min-height: 55px;
@@ -18,17 +18,18 @@ header {
     min-height: 50px;
 }
 
+
 .home-button {
-    position: fixed;
-    left: 0;
-    float: left;
-    width: 40px;
-    text-align: center;
+  position: fixed;
+  left: 0;
+  float:left;
+  width: 40px;
+  text-align: center;
 }
 
 .nav {
     font-size: 1.25em;
-    display: inline-block;
+    display:inline-block;
     text-decoration: none;
 
     padding: 15px 10px;
@@ -36,14 +37,14 @@ header {
     color: #ffffff;
 }
 
-.logout-menu {
-    background: #1ABC9C;
-    position: absolute;
-    right: 0;
-    padding: 0 10px 10px 10px;
-    border-radius: 0 0 0px 10px;
+.logout-menu{
+  background: #1ABC9C;
+  position: absolute;
+  right: 0;
+  padding: 0 10px 10px 10px;
+  border-radius: 0 0 0px 10px;
 }
 
-.logout-menu span, .logout-menu a {
+.logout-menu span,.logout-menu a{
     padding: 0 10px 0 10px;
 }

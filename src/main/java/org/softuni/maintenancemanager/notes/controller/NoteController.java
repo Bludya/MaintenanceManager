@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
-@RequestMapping("/logs")
+@RequestMapping("/notes")
 public class NoteController {
-    NotesService notesService;
+    private NotesService notesService;
 
     @Autowired
     public NoteController(NotesService notesService) {

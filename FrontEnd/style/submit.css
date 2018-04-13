@@ -5,22 +5,22 @@
     overflow: auto;
 }
 
-.submitForm > * {
+.submitForm>* {
     display: block;
     width: 400px;
     box-sizing: border-box;
 }
 
-.submitForm > label {
+.submitForm>label {
     margin-top: 10px;
 }
 
-.submitForm > textarea {
+.submitForm>textarea {
     resize: none;
     height: 9em;
 }
 
-.submitForm > input[type="submit"] {
+.submitForm>input[type="submit"] {
     margin-top: 10px;
     width: 100px;
 }

@@ -10,26 +10,26 @@
               <th>Email</th>
               <th>Username</th>
               <th>Active</th>
-              <th>Role</th>
+              <th>Roles</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {{#each users}}
             {{#if isNotMe}}
-              <tr>
+              <tr id="{{username}}">
                 <td>{{email}}</td>
                 <td>{{username}}</td>
-                <td>{{enabled}}</td>
+                <td id="active">{{enabled}}</td>
                 <td>{{roles}}</td>
                 <td>
                   <div class="buttons">
                   {{#if enabled}}
-                    <a href="#/users/deactivate/{{id}}" class="button">Deactivate</a>
+                    <a href="#/users/deactivate/{{username}}" id="deactivate" class="button">Deactivate</a>
                   {{else}}
-                    <a href="#/users/activate/{{id}}" class="button">Activate</a>
+                    <a href="#/users/activate/{{username}}" id="activate" class="button">Activate</a>
                   {{/if}}
-                    <a href="#/users/delete/{{id}}" class="button">Delete</a>
+                    <a href="#/users/delete/{{username}}" id="delete" class="button">Delete</a>
                   </div>
                 </td>
               </tr>

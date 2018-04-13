@@ -4,6 +4,8 @@ import org.softuni.maintenancemanager.logger.model.entity.Log;
 import org.softuni.maintenancemanager.logger.model.repositories.LogRepository;
 import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,8 +32,8 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public Set<Log> getAllLogs() {
-        return (Set<Log>) this.logRepository.findAll();
+    public Page<Log> getAllLogs(Pageable pageable) {
+        return this.logRepository.findAll(pageable);
     }
 
     @Override

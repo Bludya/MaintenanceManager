@@ -1,18 +1,18 @@
 <header>
-  <div id="header">
+  <nav id="header">
       <a class="nav home-button" href="#"><i class="fa fa-home"></i></a>
 
       <div class="nav-menu">
         {{#if loggedIn}}
         <a class="nav" href="#/projects">Projects</a>
         <a class="nav" href="#/tasks">My tasks</a>
-        {{#if_equal role "ADMIN"}}
+        {{#ifContains roles "ADMIN"}}
         <a class="nav" href="#/users">Users</a>
         <a class="nav" href="#/logs">Logs</a>
-        {{/if_equal}}
-        <div  class="logout-menu"><span>{{username}}</span>|<a href="#/logout">Logout</a></div>
+        {{/ifContains}}
+        <div  class="logout-menu"><a class="nav" href="#/profile">{{username}}</a>|<a href="#/logout">Logout</a></div>
         {{/if}}
       </div>
 
-  </div>
+  </nav>
 </header>

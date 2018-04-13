@@ -1,22 +1,80 @@
 package org.softuni.maintenancemanager.projects.model.dtos.view;
 
-import org.softuni.maintenancemanager.projects.model.entity.Project;
-import org.springframework.data.rest.core.config.Projection;
-
 import java.util.Date;
+import java.util.Set;
 
-@Projection(types = Project.class, name = "projectViewModel")
-public interface ProjectViewModel {
+public class ProjectViewModel {
 
-    String getId();
+    private Long id;
 
-    String getProjectName();
+    private String projectName;
 
-    String getInformation();
+    private String information;
 
-    Date getDateCreated();
+    private Date dateCreated;
 
-    Boolean getActive();
+    private Boolean active;
 
-    String getManager();
+    private String manager;
+
+    private Set<String> systems;
+
+    public ProjectViewModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public Set<String> getSystems() {
+        return systems;
+    }
+
+    public void setSystems(Set<String> systems) {
+        this.systems = systems;
+    }
 }

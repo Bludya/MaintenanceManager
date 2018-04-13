@@ -1,12 +1,9 @@
 package org.softuni.maintenancemanager.projects.model.dtos.view;
 
-import org.softuni.maintenancemanager.projects.model.entity.ProjectSystem;
-import org.springframework.data.rest.core.config.Projection;
 
-@Projection(types = ProjectSystem.class, name = "projectSystemViewModel")
-public interface ProjectSystemViewModel {
+public class ProjectSystemViewModel {
 
-    String getName();
+    String name;
 
-    String getInfo();
+    String info;
 }

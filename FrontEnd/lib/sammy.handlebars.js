@@ -1,9 +1,9 @@
 (function (factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery', 'sammy', 'handlebars'], factory);
-    } else {
-        (window.Sammy = window.Sammy || {}).Handlebars = factory(window.jQuery, window.Sammy);
-    }
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery', 'sammy', 'handlebars'], factory);
+  } else {
+    (window.Sammy = window.Sammy || {}).Handlebars = factory(window.jQuery, window.Sammy);
+  }
 }(function ($, Sammy, Handlebars) {
     // version 1.0.0 has no support for AMD but upwards does, this way we support both.
     Handlebars = Handlebars || window.Handlebars;
@@ -99,39 +99,35 @@
     // Note: You dont have to include the handlebars.js file on top of the plugin as the plugin
     // includes the full source.
     //
-    Sammy.Handlebars = function (app, method_alias) {
-        var handlebars_cache = {};
-        // *Helper* Uses handlebars.js to parse a template and interpolate and work with the passed data
-        //
-        // ### Arguments
-        //
-        // * `template` A String template.
-        // * `data` An Object containing the replacement values for the template.
-        //   data is extended with the <tt>EventContext</tt> allowing you to call its methods within the template.
-        //
-        var handlebars = function (template, data, partials, name) {
-            // use name for caching
-            if (typeof name == 'undefined') {
-                name = template;
-            }
-            var fn = handlebars_cache[name];
-            if (!fn) {
-                fn = handlebars_cache[name] = Handlebars.compile(template);
-            }
+    Sammy.Handlebars = function(app, method_alias) {
+      var handlebars_cache = {};
+      // *Helper* Uses handlebars.js to parse a template and interpolate and work with the passed data
+      //
+      // ### Arguments
+      //
+      // * `template` A String template.
+      // * `data` An Object containing the replacement values for the template.
+      //   data is extended with the <tt>EventContext</tt> allowing you to call its methods within the template.
+      //
+      var handlebars = function(template, data, partials, name) {
+          // use name for caching
+          if (typeof name == 'undefined')  { name = template; }
+          var fn = handlebars_cache[name];
+          if (!fn) {
+              fn = handlebars_cache[name] = Handlebars.compile(template);
+          }
 
-            data = $.extend({}, this, data);
-            partials = $.extend({}, data.partials, partials);
+          data     = $.extend({}, this, data);
+          partials = $.extend({}, data.partials, partials);
 
-            return fn(data, {"partials": partials});
-        };
+          return fn(data, {"partials":partials});
+      };
 
-        // set the default method name/extension
-        if (!method_alias) {
-            method_alias = 'handlebars';
-        }
-        app.helper(method_alias, handlebars);
+      // set the default method name/extension
+      if (!method_alias) { method_alias = 'handlebars'; }
+      app.helper(method_alias, handlebars);
     };
 
-    return Sammy.Handlebars;
+  return Sammy.Handlebars;
 
 }));

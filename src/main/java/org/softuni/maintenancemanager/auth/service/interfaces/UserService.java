@@ -2,6 +2,7 @@ package org.softuni.maintenancemanager.auth.service.interfaces;
 
 import org.softuni.maintenancemanager.auth.model.dtos.binding.UserFullModel;
 import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
+import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface UserService extends UserDetailsService {
     void delete(String editor, String id);
 
     List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord);
+
+    User getUserByUsername(String username);
 }

@@ -4,12 +4,13 @@ import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, String> {
 
-    List<User> findAllByUsernameContainsOrEmailContains(String searchWord, String searchWord2);
+    List<User> findAllByUsernameContainsOrEmailContainsOrderByIsEnabledAsc(String searchWord, String searchWord2);
 
     User getByEmail(String email);
 
@@ -20,4 +21,7 @@ public interface UserRepository extends CrudRepository<User, String> {
     boolean existsByUsername(String username);
 
     boolean existsByEmailOrUsernameAndIdNot(String email, String username, String id);
+
+    @Transactional
+    void deleteByUsername(String username);
 }

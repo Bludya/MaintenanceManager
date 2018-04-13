@@ -3,18 +3,16 @@ package org.softuni.maintenancemanager.auth.controller;
 import org.softuni.maintenancemanager.auth.model.dtos.binding.UserFullModel;
 import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
+import org.softuni.maintenancemanager.errorHandling.exceptions.EntryCanNotBeCreated;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping("/users")
 public class UsersController {
 
@@ -28,62 +26,53 @@ public class UsersController {
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute UserFullModel userDto,
                            BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()) {
-            Object result = this.userService.register(userDto);
-            if (result instanceof FieldError) {
-                bindingResult.addError((FieldError) result);
-            } else {
-                return result;
-            }
+        if(bindingResult.hasErrors()){
+            throw new EntryCanNotBeCreated(bindingResult.getSuppressedFields());
         }
 
+        return this.userService.register(userDto);
+    }
 
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-            return errors;
+    @GetMapping("/profile")
+    public UserViewModel profile(@RequestParam(name = "name", required = false) String name,
+                                 Authentication auth) {
+        if(name == null || !name.equals("")){
+            return this.userService.getByUsername(auth.getName());
         }
 
-        return "Successful registration.";
+        return this.userService.getByUsername(name);
     }
 
-    @PostMapping("/profile")
-    public UserViewModel profile(@RequestParam String id) {
-        return this.userService.getById(id);
+    @GetMapping("/all")
+    public Object allUsers() {
+        return this.userService.getAllBySearchWordOrderedByActive("");
     }
 
-    @PostMapping("/all")
-    public Object allUsers(@RequestParam(required = false) String searchWord) {
+    @GetMapping("/find/{searchWord}")
+    public Object searchUsers(@PathVariable(required = false) String searchWord) {
         if (searchWord == null) {
             searchWord = "";
         }
         return this.userService.getAllBySearchWordOrderedByActive(searchWord);
     }
 
-    @PostMapping("/activate")
-    public Object activateUser(@RequestParam String id,
+    @GetMapping("/activate/{username}")
+    public Object activateUser(@PathVariable String username,
                                Authentication authentication) {
-//        User user = (User)authentication.getPrincipal();
-
-        return this.userService.activateUser("valio", id);
+        return this.userService.activateUser(authentication.getName(), username);
     }
 
-    @PostMapping("/deactivate")
-    public Object deactivateUser(@RequestParam String id,
+    @GetMapping("/deactivate/{username}")
+    public Object deactivateUser(@PathVariable String username,
                                  Authentication authentication) {
-//        User user = (User)authentication.getPrincipal();
-
-        return this.userService.deactivateUser("valio", id);
+        return this.userService.deactivateUser(authentication.getName(), username);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteUser(@RequestParam String id,
-                           Authentication authentication) {
-//       authentication.getName()
+    @GetMapping("/delete/{username}")
 
-        this.userService.delete("valio", id);
+    public Object deleteUser(@PathVariable String username,
+                           Authentication authentication) {
+        this.userService.delete(authentication.getName(), username);
+        return  "{\"success\": \"yes\"}";
     }
 }

@@ -1,7 +1,6 @@
 package org.softuni.maintenancemanager.auth.service;
 
 import org.modelmapper.ModelMapper;
-import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
 import org.softuni.maintenancemanager.auth.model.dtos.binding.UserFullModel;
 import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
 import org.softuni.maintenancemanager.auth.model.entity.Role;
@@ -9,7 +8,7 @@ import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.auth.model.repositories.UserRepository;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
 import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFound;
-import org.softuni.maintenancemanager.errorHandling.exceptions.UserAlreadyExists;
+import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.UserAlreadyExists;
 import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
         usersRepository.save(user);
         logService.addLog(user.getUsername(), "User created");
-        return userDto;
+        return this.modelMapper.map(user, UserViewModel.class);
     }
 
     @Override
@@ -119,48 +118,46 @@ public class UserServiceImpl implements UserService {
         return this.mapUserViewModel(user);
     }
 
-    public UserViewModel deactivateUser(String editor, String id) {
-        Optional<User> optionalUser = this.usersRepository.findById(id);
+    public UserViewModel deactivateUser(String editor, String username) {
+       User user= this.usersRepository.getByUsername(username);
 
-        if (!optionalUser.isPresent()) {
+        if (user == null) {
             throw new EntryNotFound();
         }
 
-        User user = optionalUser.get();
         user.setEnabled(false);
         usersRepository.save(user);
-        logService.addLog(editor, "Deactivated user with id: " + id);
+        logService.addLog(editor, "Deactivated user with id: " + user.getId());
 
         return this.mapUserViewModel(user);
     }
 
-    public UserViewModel activateUser(String editor, String id) {
-        Optional<User> optionalUser = this.usersRepository.findById(id);
+    public UserViewModel activateUser(String editor, String username) {
+        User user = this.usersRepository.getByUsername(username);
 
-        if (!optionalUser.isPresent()) {
+        if (user == null) {
             throw new EntryNotFound();
         }
 
-        User user = optionalUser.get();
         user.setEnabled(true);
         usersRepository.save(user);
-        logService.addLog(editor, "Activated user with id: " + id);
+        logService.addLog(editor, "Activated user with id: " + user.getId());
         return this.mapUserViewModel(user);
     }
 
-    public void delete(String editor, String id) {
-        if (!usersRepository.existsById(id)) {
+    public void delete(String editor, String username) {
+        if (!usersRepository.existsByUsername(username)) {
             throw new EntryNotFound();
         }
 
-        usersRepository.deleteById(id);
-        logService.addLog(editor, "Deleted user with id: " + id);
+        usersRepository.deleteByUsername(username);
+        logService.addLog(editor, "Deleted user with username: " + username);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        email = CharacterEscapes.escapeString(email);
-        User user = this.usersRepository.getByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        //email = CharacterEscapes.escapeString(email);
+        User user = this.usersRepository.getByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User doesn't exist");
         }
@@ -182,9 +179,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord) {
-        return this.usersRepository.findAllByUsernameContainsOrEmailContains(searchWord, searchWord).stream()
+        return this.usersRepository.findAllByUsernameContainsOrEmailContainsOrderByIsEnabledAsc(searchWord, searchWord).stream()
                 .map(this::mapUserViewModel)
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public User getUserByUsername(String username) {
+        return this.usersRepository.getByUsername(username);
+    }
 }

@@ -9,4 +9,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource(collectionResourceRel = "projects", path = "projects", excerptProjection = ProjectViewModel.class)
 @CrossOrigin(origins = "http://localhost:8080")
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+    boolean existsByProjectName(String projectName);
 }
