@@ -6,6 +6,7 @@ import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService extends UserDetailsService {
     Object register(UserFullModel userDto);
@@ -15,6 +16,8 @@ public interface UserService extends UserDetailsService {
     boolean userExists(String email, String username, String id);
 
     List<UserViewModel> getAll();
+
+    Set<UserViewModel> getAllByRole(String role);
 
     UserViewModel getById(String id);
 

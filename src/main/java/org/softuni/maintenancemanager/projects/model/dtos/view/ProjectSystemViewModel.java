@@ -3,7 +3,26 @@ package org.softuni.maintenancemanager.projects.model.dtos.view;
 
 public class ProjectSystemViewModel {
 
-    String name;
+    private String name;
 
-    String info;
+    private String info;
+
+    public ProjectSystemViewModel() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
 }

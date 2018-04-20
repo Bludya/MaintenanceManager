@@ -1,0 +1,66 @@
+<section id="projectInfo" class="bigView">
+  <div class="projectProfile col-sm-12">
+    <div class="basicInfo col-sm-5">
+      {{#with project}}
+      <div class="row">
+        <h1>{{projectName}} <span class="activeInfo">
+          {{#if active}}
+          (Active)
+          {{else}}
+          (Inactive)
+          {{/if}}
+        </span>
+        </h1>
+      </div>
+      <div class="row">
+        <h2 id="manager">Manager:<br></br> <span>{{manager}}</span></h2>
+      </div>
+      <div class="row">
+        <h3>Created on:<br></br> <span>{{dateCreated}}</span></h3>
+      </div>
+      <div class="row">
+        <h3 id="projectInfo">Info:<br></br> <span>{{information}}</span></h3>
+      </div>
+    </div>
+    <div class="systems col-sm-3">
+      <h3>Systems: </h3>
+      <ul>
+        {{#each systems}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/with}}
+    {{#ifContains roles "ADMIN"}}
+    {{#with project}}
+    <div class="actions col-sm-4">
+
+      {{#if active}}
+      <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <a href="#/projects/deactivate/{{projectName}}" class="button actionButton col-sm-12">Deactivate</a>
+        <div class="col-sm-4">
+        </div>
+      </div>
+      {{else}}
+      <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <a href="#/projects/activate/{{projectName}}" class="button actionButton col-sm-12">Activate</a>
+        <div class="col-sm-4">
+        </div>
+      </div>
+      {{/if}}
+      <div class="row">
+        <div class="col-sm-4">
+        </div>
+        <a href="#/deleteProject/{{projectName}}" class="button col-sm-12">Delete</a>
+        <div class="col-sm-4">
+        </div>
+      </div>
+    </div>
+    {{/with}}
+    {{/ifContains}}
+  </div>
+</section>

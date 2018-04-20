@@ -1,12 +1,37 @@
 package org.softuni.maintenancemanager.projects.model.dtos.binding;
 
-import java.util.Set;
-
 public class ProjectFullModel {
 
-    public String projectName;
+    private String projectName;
 
-    public String information;
+    private String information;
 
-    public Set<String> systems;
+    private String manager;
+
+    public ProjectFullModel() {
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
 }

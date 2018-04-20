@@ -7,10 +7,7 @@ let requester = (() => {
         let req = {
             type: method,
             url: serverBaseUrl + url,
-            contentType: 'text/plain',
-            dataType: "json",
-            crossDomain: false,
-            data: JSON.stringify(data)
+            data: data
         };
 
         if(sessionStorage.token != 'undefined'){
@@ -44,7 +41,6 @@ let requester = (() => {
             .fail(failFunc);
     }
 
-    // Function to return POST promise
     function post (url, data, thenFunc, failFunc) {
         let req = makeRequest('POST', url, data);
         $.ajax(req)
@@ -52,7 +48,14 @@ let requester = (() => {
           .fail(failFunc);
     }
 
-    // Function to return PUT promise
+    function loginPost (data, thenFunc, failFunc) {
+        let req = makeRequest('POST', '/login', JSON.stringify(data));
+        req.contentType = 'text/plain';
+        $.ajax(req)
+          .then(thenFunc)
+          .fail(failFunc);
+    }
+
     function update (url, data, thenFunc, failFunc) {
         let req = makeRequest('PUT', url, data);
         $.ajax(req)
@@ -60,7 +63,6 @@ let requester = (() => {
           .fail(failFunc);
     }
 
-    // Function to return DELETE promise
     function remove (url, thenFunc, failFunc) {
         $.ajax(makeRequest('DELETE', url))
           .then(thenFunc)
@@ -70,6 +72,7 @@ let requester = (() => {
     return {
         get,
         post,
+        loginPost,
         update,
         remove
     }

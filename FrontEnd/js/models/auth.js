@@ -13,7 +13,7 @@ let auth = (() => {
             'password': password,
         };
 
-        requester.post('/login', userData, funcThen, funcFail);
+        requester.loginPost(userData, funcThen, funcFail);
     }
 
     // user/register

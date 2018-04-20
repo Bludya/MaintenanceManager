@@ -29,6 +29,9 @@ footer {
   width: 100%;
   padding: 10px 0;
   background: #1ABC9C;
+  border-top-style: solid;
+  border-top-width: thin;
+  border-top-color: grey;
 }
 
 .container {
@@ -45,12 +48,13 @@ section{
       width: inherit;
       height: 40%;
       margin: auto;
-      padding: 0 100px;
 }
 
 .bigView{
       height: 70%;
+      padding-top: 20px;
 }
+
 tr{
   border-bottom: 2px;
 }
@@ -70,7 +74,7 @@ form {
     background: #1ABC9C;
     margin: 0 auto;
     padding: 10px;
-    width: 350px;
+    width: 360px;
     border-radius: 10px;
     margin: 0 auto;
 }
@@ -79,11 +83,6 @@ form {
     display: block;
     margin: 10px 20px 10px 0;
     text-align: right;
-}
-
-input {
-  float: right;
-  margin: 0 20px;
 }
 
 .search-bar input{

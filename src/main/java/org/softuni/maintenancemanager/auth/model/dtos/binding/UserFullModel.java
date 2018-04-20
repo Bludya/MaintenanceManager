@@ -25,9 +25,19 @@ public class UserFullModel {
     @NotEmpty(message = EMPTY_PASSWORD_MESSAGE)
     private String repeatPassword;
 
-    //private String comments;
+    public UserFullModel(@NotNull(message = EMPTY_USERNAME_MESSAGE) @NotEmpty(message = EMPTY_USERNAME_MESSAGE) String username, @NotNull(message = EMPTY_EMAIL_MESSAGE) @NotEmpty(message = EMPTY_EMAIL_MESSAGE) String email, @NotNull(message = EMPTY_PASSWORD_MESSAGE) @NotEmpty(message = EMPTY_PASSWORD_MESSAGE) String password, @NotNull(message = EMPTY_PASSWORD_MESSAGE) @NotEmpty(message = EMPTY_PASSWORD_MESSAGE) String repeatPassword) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.repeatPassword = repeatPassword;
+    }
 
     public UserFullModel() {
+    }
+
+    //private String comments;
+
+    public UserFullModel(String u) {
     }
 
     public String getUsername() {
@@ -62,11 +72,4 @@ public class UserFullModel {
         this.email = email;
     }
 
-//    public String getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(String comments) {
-//        this.comments = comments;
-//    }
 }

@@ -1,6 +1,6 @@
 package org.softuni.maintenancemanager.logger.controller;
 
-import org.softuni.maintenancemanager.logger.model.repositories.LogRepository;
+import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/logs")
 public class LogController {
-    LogRepository logRepository;
+    private LogService logService;
 
     @Autowired
-    public LogController(LogRepository logRepository) {
-        this.logRepository = logRepository;
+    public LogController(LogService logService) {
+        this.logService = logService;
     }
 
     @GetMapping("/all")
@@ -27,6 +27,6 @@ public class LogController {
             @PageableDefault()
             @SortDefault(sort = "timeOfOccurrence", direction = Sort.Direction.DESC)
                     Pageable pageable) {
-        return this.logRepository.findAll(pageable);
+        return this.logService.getAllLogs(pageable);
     }
 }

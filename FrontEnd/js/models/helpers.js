@@ -68,3 +68,17 @@
 
       return true;
     }
+
+    function activatePopup(){
+      let popup = document.getElementById("myPopup");
+      let form = document.getElementById("form");
+
+      popup.classList.toggle("show");
+      form.classList.toggle("show");
+    }
+
+    function showField(button, attribute){
+      let row = $(button).parent();
+      let popup = document.getElementById("myPopup");
+      popup.classList.toggle("show");
+    }

@@ -2,7 +2,7 @@ package org.softuni.maintenancemanager.projects.service;
 
 import org.modelmapper.ModelMapper;
 import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.ProjectSystemAlreadyExistsException;
-import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
+import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.softuni.maintenancemanager.projects.model.dtos.binding.ProjectSystemBindModel;
 import org.softuni.maintenancemanager.projects.model.dtos.view.ProjectSystemViewModel;
 import org.softuni.maintenancemanager.projects.model.entity.ProjectSystem;
@@ -19,15 +19,15 @@ public class ProjectSystemsServiceImpl implements ProjectSystemsService{
 
     private ProjectSystemRepository repository;
     private ModelMapper modelMapper;
-    private LogService logService;
+    private Logger logger;
 
     @Autowired
     public ProjectSystemsServiceImpl(ProjectSystemRepository repository,
                                      ModelMapper modelMapper,
-                                     LogService logService) {
+                                     Logger logger) {
         this.repository = repository;
         this.modelMapper = modelMapper;
-        this.logService = logService;
+        this.logger = logger;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ProjectSystemsServiceImpl implements ProjectSystemsService{
 
         ProjectSystem projectSystem = modelMapper.map(projectSystemBindModel, ProjectSystem.class);
         this.repository.save(projectSystem);
-        this.logService.addLog(author, "Added a new system with the name: " + projectSystem.getName());
+        this.logger.addLog(author, "Added a new system with the name: " + projectSystem.getName());
 
         return modelMapper.map(projectSystem, ProjectSystemViewModel.class);
     }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 @RequestMapping("/users")
 public class UsersController {
 
@@ -26,10 +26,15 @@ public class UsersController {
     @PostMapping("/register")
     public Object register(@Valid @ModelAttribute UserFullModel userDto,
                            BindingResult bindingResult) {
+
         if(bindingResult.hasErrors()){
             throw new EntryCanNotBeCreated(bindingResult.getSuppressedFields());
         }
 
+        System.out.println(userDto.getEmail());
+        System.out.println(userDto.getUsername());
+        System.out.println(userDto.getPassword());
+        System.out.println(userDto.getRepeatPassword());
         return this.userService.register(userDto);
     }
 
@@ -46,6 +51,11 @@ public class UsersController {
     @GetMapping("/all")
     public Object allUsers() {
         return this.userService.getAllBySearchWordOrderedByActive("");
+    }
+
+    @GetMapping("/managers")
+    public Object allManagers(){
+        return this.userService.getAllByRole("ROLE_MANAGER");
     }
 
     @GetMapping("/find/{searchWord}")

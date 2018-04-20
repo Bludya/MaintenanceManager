@@ -7,9 +7,9 @@ import org.softuni.maintenancemanager.auth.model.entity.Role;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.auth.model.repositories.UserRepository;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
-import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFound;
+import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.UserAlreadyExists;
-import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
+import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -30,18 +31,18 @@ public class UserServiceImpl implements UserService {
 
     private UserRepository usersRepository;
 
-    private LogService logService;
+    private Logger logger;
 
     @Autowired
     public UserServiceImpl(
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper modelMapper,
             UserRepository usersRepository,
-            LogService logService) {
+            Logger logger) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
         this.usersRepository = usersRepository;
-        this.logService = logService;
+        this.logger = logger;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(this.bCryptPasswordEncoder.encode(userDto.getPassword()));
 
         usersRepository.save(user);
-        logService.addLog(user.getUsername(), "User created");
+        logger.addLog(user.getUsername(), "User created");
         return this.modelMapper.map(user, UserViewModel.class);
     }
 
@@ -78,10 +79,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set<UserViewModel> getAllByRole(String role) {
+        return this.usersRepository.findAllByRole(role).stream()
+                .map(this::mapUserViewModel)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public UserViewModel getById(String id) {
         Optional<User> optionalUser = this.usersRepository.findById(id);
         if (!optionalUser.isPresent()) {
-            throw new EntryNotFound();
+            throw new EntryNotFoundException();
         }
 
         return this.mapUserViewModel(optionalUser.get());
@@ -90,7 +98,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserViewModel getByUsername(String username) {
         if (!this.usersRepository.existsByUsername(username)) {
-            throw new EntryNotFound();
+            throw new EntryNotFoundException();
         }
 
         return this.mapUserViewModel(this.usersRepository.getByUsername(username));
@@ -101,7 +109,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> userOptional = this.usersRepository.findById(id);
 
         if (!userOptional.isPresent()) {
-            throw new EntryNotFound();
+            throw new EntryNotFoundException();
         }
 
         if (!this.usersRepository.existsByEmailOrUsernameAndIdNot(userDto.getEmail(), userDto.getUsername(), id)) {
@@ -113,7 +121,7 @@ public class UserServiceImpl implements UserService {
         modelMapper.map(userDto, user);
         usersRepository.save(user);
 
-        logService.addLog(editor, "Editted user " + id);
+        logger.addLog(editor, "Editted user " + id);
 
         return this.mapUserViewModel(user);
     }
@@ -122,12 +130,12 @@ public class UserServiceImpl implements UserService {
        User user= this.usersRepository.getByUsername(username);
 
         if (user == null) {
-            throw new EntryNotFound();
+            throw new EntryNotFoundException();
         }
 
         user.setEnabled(false);
         usersRepository.save(user);
-        logService.addLog(editor, "Deactivated user with id: " + user.getId());
+        logger.addLog(editor, "Deactivated user with id: " + user.getId());
 
         return this.mapUserViewModel(user);
     }
@@ -136,22 +144,22 @@ public class UserServiceImpl implements UserService {
         User user = this.usersRepository.getByUsername(username);
 
         if (user == null) {
-            throw new EntryNotFound();
+            throw new EntryNotFoundException();
         }
 
         user.setEnabled(true);
         usersRepository.save(user);
-        logService.addLog(editor, "Activated user with id: " + user.getId());
+        logger.addLog(editor, "Activated user with id: " + user.getId());
         return this.mapUserViewModel(user);
     }
 
     public void delete(String editor, String username) {
         if (!usersRepository.existsByUsername(username)) {
-            throw new EntryNotFound();
+            throw new EntryNotFoundException();
         }
 
         usersRepository.deleteByUsername(username);
-        logService.addLog(editor, "Deleted user with username: " + username);
+        logger.addLog(editor, "Deleted user with username: " + username);
     }
 
     @Override

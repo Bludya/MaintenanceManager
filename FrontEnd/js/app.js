@@ -22,7 +22,6 @@ $(() => {
       return opts.fn(this)
     });
 
-
     this.get('index.html', function (ctx){
       let url = '/welcome/welcome';
 
@@ -132,7 +131,7 @@ $(() => {
         function(user){
           loadPage(ctx, '/users/profile')
         }
-    );
+      )
     })
 
     this.get('#/logout', function (ctx){
@@ -176,7 +175,6 @@ $(() => {
       requester.get(
         url + searchWord,
         function thenFUnc(users){
-          console.log("efwefwef");
           for(let i = 0; i < users.length; i++){
             let user = users[i];
             user.rank = i+1;
@@ -247,6 +245,10 @@ $(() => {
 
     this.get('#/logs', function (ctx){
 
+      if(!checkAccessible(ctx, "ADMIN")){
+        return;
+      }
+
       let page = ctx.params.page;
       if(!page){
         page = 0;
@@ -289,22 +291,24 @@ $(() => {
     })
 
     this.get('#/projects', function(ctx){
-      let projectId = ctx.params.projectId;
-      console.log(projectId);
-      if(!projectId){
+
+      if(!checkAccessible(ctx, "")){
+        return;
+      }
+
+      let projectName = ctx.params.projectName;
+      if(!projectName){
         requester.get(
           '/projects/all',
           function thenFUnc(projects){
-            console.log(projects);
             ctx.projects = projects;
             loadPage(ctx, '/projects/showProjects', {projectPreview: './templates/projects/projectPreview.hbs'});
           }
         )
       }else {
         requester.get(
-          '/projects?project=' + projectId,
+          '/projects/' + projectName,
           function thenFUnc(project){
-            console.log(project);
             ctx.project = project;
             loadPage(ctx, '/projects/projectInfo');
           }
@@ -312,6 +316,115 @@ $(() => {
       }
     })
 
+    this.get('#/projects/:action/:projectName', function (ctx){
+      if(!checkAccessible(ctx, "ADMIN")){
+        return;
+      }
+
+      let action = ctx.params.action;
+      let projectName = ctx.params.projectName;
+      requester.post(
+        '/projects/action/' + action,
+        {projectName: projectName},
+        function thenFunc(){
+          let link =  $('.actionButton');
+          let activeText = $('.activeInfo');
+
+          if(action == 'activate'){
+            link.attr("href", "#/projects/deactivate/" + projectName);
+            link.text('Deactivate');
+            activeText.text('(Active)')
+          } else if( action == 'deactivate'){
+            link.attr("href", "#/projects/activate/" + projectName);
+            link.text('Activate');
+            activeText.text('(Inactive)')
+          }
+        }
+      )
+    })
+
+    this.get('#/addProject', function (ctx){
+      if(!checkAccessible(ctx, "ADMIN")){
+        return;
+      }
+
+      requester.get(
+        '/users/managers',
+        function thenFUnc(managers){
+          ctx.managers = managers;
+          requester.get(
+            '/project-systems/all',
+            function thenFUnc(projectSystems){
+              ctx.projectSystems = projectSystems;
+              loadPage(ctx, '/projects/addProject');
+            },
+            function failFunc(){
+              showError('Project systems could not be loaded.');
+            }
+          )
+
+        },
+        function failFunc(){
+          showError('Managers could not be loaded.');
+        }
+      )
+    })
+
+    this.post('#/addProject', function (ctx){
+      let {projectName, information, manager, systems} = this.params;
+
+      if(projectName.length < 1){
+        showError("Project name can't be empty.");
+        return;
+      }
+
+      if(manager.length < 1){
+        showError("Project manager needs to be set.")
+        return;
+      }
+
+
+      requester.post(
+        '/projects/add',
+        {projectName, information, manager, 'systems':systems},
+        function thenFunc(data){
+         ctx.redirect('#/projects')
+        }
+    )})
+
+    this.get('#/deleteProject/:projectName', function(ctx){
+      let projectName = ctx.params.projectName;
+      console.log(projectName);
+      requester.post(
+        '/projects/delete',
+        {'projectName': projectName},
+        function thenFunc(data){
+          ctx.redirect('#/projects');
+        }
+      )
+    })
+
+    this.post('#/addSystem', function (ctx){
+      let {name, info} = ctx.params;
+
+      if(systemName.length < 1){
+        showError('System name should not be empty.')
+        return;
+      }
+
+      requester.post(
+        '/project-systems/add',
+        {name, info},
+        function thenFunc(data){
+          let option = '<option name="projectSystem" values="' + data.name + '">'+ data.name + '</option>'
+          $('#selectSystems').append(option);
+        }
+      )
+    })
+
+    this.get('#/tasks', function (ctx){
+      loadPage(ctx, '/tasks/show');
+    })
   });
   app.run();
 });

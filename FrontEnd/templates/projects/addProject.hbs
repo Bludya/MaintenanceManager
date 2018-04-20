@@ -1,0 +1,67 @@
+<section id="addProject" class="bigView">
+  <form id="addProjectForm" class="form-horizontal col-sm-10 show" action="#/addProject" method="post">
+    <h2>Project data</h2>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label for="projectName" class="control-label col-sm-4">Project name:</label>
+        <div class="col-sm-8">
+          <input class="form-control" name="projectName" id="projectName" type="text"/>
+        </div>
+      </div>
+      <div class="form-group col-sm-6">
+       <label for="selectManager" class="control-label col-sm-4">Select manager:</label>
+       <div class="col-sm-8">
+         <select class="form-control"  name="manager" id="selectManager">
+           {{#each managers}}
+           <option>{{username}}</option>
+           {{/each}}
+         </select>
+       </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-6">
+        <label for="info" class="control-label col-sm-4">Project info:</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" id="info"  name="information" type="textarea" rows="4"></textarea>
+        </div>
+      </div>
+      <div class="form-group col-sm-6">
+       <label for="selectSystems" class="control-label col-sm-4">Select systems:</label>
+       <div class="col-sm-5">
+         <select class="form-control"  name="systems" id="selectSystems" multiple="">
+           {{#each projectSystems}}
+           <option name="projectSystem" values="{{name}}">{{name}}</option>
+           {{/each}}
+         </select>
+       </div>
+       <div class="col-sm-3" onclick="activatePopup()">
+           <i class="fa fa-plus-circle"></i>
+           <span>Add system</span>
+       </div>
+      </div>
+    </div>
+    <input class="form-button" id="btnSubmit" value="Add Project" type="submit"/>
+  </form>
+
+  <div class="myPopup">
+    <form id="myPopup" class="form-horizontal col-sm-12 popuptext" action="#/addSystem" method="post">
+      <span class="window-close col-sm-12" onclick="activatePopup()"><i class="fa fa-close"></i></span>
+      <div class="form-group col-sm-12">
+        <label for="systemName" class="control-label col-sm-4">System name:</label>
+        <div class="col-sm-8">
+          <input class="form-control" name="name" id="systemName" type="text"/>
+        </div>
+      </div>
+      <div class="form-group col-sm-12">
+        <div class="form-group col-sm-12">
+          <label for="systemInfo" class="control-label col-sm-4">System info:</label>
+          <div class="col-sm-8">
+            <textarea class="form-control" id="systemInfo"  name="info" type="textarea" rows="4"></textarea>
+          </div>
+        </div>
+      </div>
+      <input class="form-button" id="btnSubmit" value="Add System" type="submit" onclick="activatePopup()"/>
+    </form>
+  </div>
+</section>

@@ -1,7 +1,12 @@
 <section id="showProjects" class="bigView">
-  <div class="showProjects">
+  <div class="showProjects col-sm-12 center">
       {{#each projects}}
         {{>projectPreview}}
       {{/each}}
+      {{#ifContains roles "ADMIN"}}
+      <div class="linkDiv col-sm-5">
+        <a class="addProject" href="#/addProject"><i class="fa fa-plus-circle"></i></a>
+      </div>
+      {{/ifContains}}
   </div>
 </section>

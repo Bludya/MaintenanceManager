@@ -14,7 +14,7 @@ public interface TaskViewModel {
 
     Date getDeadline();
 
-    @Value("#{target.getProject().getId()}")
+    @Value("#{target.getProject().getProjectName()}")
     String getProject();
 
     Boolean getCompleted();

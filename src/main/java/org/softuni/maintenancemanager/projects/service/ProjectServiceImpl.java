@@ -2,8 +2,9 @@ package org.softuni.maintenancemanager.projects.service;
 
 import org.modelmapper.ModelMapper;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
+import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.ProjectExistsException;
-import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
+import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.softuni.maintenancemanager.projects.model.dtos.binding.ProjectFullModel;
 import org.softuni.maintenancemanager.projects.model.dtos.view.ProjectViewModel;
 import org.softuni.maintenancemanager.projects.model.entity.Project;
@@ -14,25 +15,27 @@ import org.softuni.maintenancemanager.projects.service.interfaces.ProjectSystems
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private ProjectRepository projectRepository;
-    private LogService logService;
+    private Logger logger;
     private UserService userService;
     private ProjectSystemsService projectSystemsService;
     private ModelMapper modelMapper;
 
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository,
-                              LogService logService,
+                              Logger logger,
                               ProjectSystemsService projectSystemsService,
                               ModelMapper modelMapper,
                               UserService userService) {
         this.projectRepository = projectRepository;
-        this.logService = logService;
+        this.logger = logger;
         this.modelMapper = modelMapper;
         this.projectSystemsService = projectSystemsService;
         this.userService = userService;
@@ -41,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Set<ProjectViewModel> getAll() {
         return this.projectRepository
-                .findAll()
+                .getAllByOrderByProjectNameDesc()
                 .stream()
                 .map(project -> {
                     ProjectViewModel pvm = modelMapper.map(project, ProjectViewModel.class);
@@ -59,19 +62,86 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectViewModel addProject(String author, ProjectFullModel projectBindModel) {
-        if(this.projectRepository.existsByProjectName(projectBindModel.projectName)){
+    public ProjectViewModel getByName(String name) {
+        Project project = this.projectRepository.getByProjectName(name);
+
+        if(project == null){
+            throw new EntryNotFoundException();
+        }
+
+        return this.mapProjectToView(project);
+    }
+
+    @Override
+    public ProjectViewModel addProject(String author, ProjectFullModel projectBindModel, Set<String> systems) {
+        if(this.projectRepository.existsByProjectName(projectBindModel.getProjectName())){
             throw new ProjectExistsException();
         }
 
-        Project project = this.modelMapper.map(modelMapper, Project.class);
-        project.setActive(true);
+        Project project = this.mapDtoToProject(projectBindModel, systems);
         project.setAuthor(this.userService.getUserByUsername(author));
-        project.setSystems(this.projectSystemsService.getAllContainedIn(projectBindModel.systems));
+        project.setDateCreated(new Date());
+        this.projectRepository.save(project);
+        this.logger.addLog(author, "Added new project: " + projectBindModel.getProjectName());
+
+        return this.mapProjectToView(project);
+    }
+
+    @Override
+    public ProjectViewModel changeProjectActive(String author, String projectName, String action) {
+        Project project = this.projectRepository.getByProjectName(projectName);
+
+        if(project == null){
+            throw new EntryNotFoundException();
+        }
+
+        if(action.equals("activate")){
+            project.setActive(true);
+        }
+        else if(action.equals("deactivate")){
+            project.setActive(false);
+        }
 
         this.projectRepository.save(project);
-        this.logService.addLog(author, "Added new project: " + projectBindModel.projectName);
 
-        return this.modelMapper.map(project, ProjectViewModel.class);
+        action = action.substring(0, 1).toUpperCase() + action.substring(1);
+        this.logger.addLog(author, action + "d project " + projectName);
+
+        return this.mapProjectToView(project);
+    }
+
+    @Override
+    @Transactional
+    public Long deleteProject(String userName, String projectName){
+        Long deletedRows = this.projectRepository.deleteByProjectName(projectName);
+        this.logger.addLog(userName, "Deleted project with name: " + projectName);
+
+        return deletedRows;
+    }
+
+    private ProjectViewModel mapProjectToView(Project project){
+        ProjectViewModel pvm = modelMapper.map(project, ProjectViewModel.class);
+        pvm.setSystems(
+                project.getSystems()
+                        .stream()
+                        .map(ProjectSystem::getName)
+                        .collect(Collectors.toSet()));
+
+        if(pvm.getManager() == null){
+            pvm.setManager("No manager currently.");
+        } else {
+            pvm.setManager(project.getManager().getUsername());
+        }
+
+        return pvm;
+    }
+
+    private Project mapDtoToProject(ProjectFullModel projectBindModel, Set<String> systems){
+        Project project = this.modelMapper.map(projectBindModel, Project.class);
+        project.setActive(true);
+        project.setManager(this.userService.getUserByUsername(projectBindModel.getManager()));
+        project.setSystems(this.projectSystemsService.getAllContainedIn(systems));
+
+        return project;
     }
 }

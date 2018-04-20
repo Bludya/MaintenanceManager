@@ -5,6 +5,8 @@ header {
     min-height: 55px;
     background: #1ABC9C;
     text-align: right;
+    border-bottom-style:solid;
+    border-bottom-color: grey;
 }
 
 .logo, .header {
@@ -43,6 +45,12 @@ header {
   right: 0;
   padding: 0 10px 10px 10px;
   border-radius: 0 0 0px 10px;
+  border-left-color: grey;
+  border-left-style: solid;
+  border-left-width: thin;
+  border-bottom-style: solid;
+  border-bottom-color: grey;
+  border-bottom-width: thin;
 }
 
 .logout-menu span,.logout-menu a{

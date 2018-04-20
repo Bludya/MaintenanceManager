@@ -3,6 +3,7 @@ package org.softuni.maintenancemanager.logger.service;
 import org.softuni.maintenancemanager.logger.model.entity.Log;
 import org.softuni.maintenancemanager.logger.model.repositories.LogRepository;
 import org.softuni.maintenancemanager.logger.service.interfaces.LogService;
+import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,9 +13,9 @@ import java.util.Date;
 import java.util.Set;
 
 @Service
-public class LogServiceImpl implements LogService {
+public class LogServiceImpl implements Logger, LogService {
 
-    LogRepository logRepository;
+    private LogRepository logRepository;
 
     @Autowired
     public LogServiceImpl(LogRepository logRepository) {

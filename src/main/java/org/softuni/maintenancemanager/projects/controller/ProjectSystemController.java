@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/project-systems")
@@ -22,18 +24,17 @@ public class ProjectSystemController {
     }
 
     @PostMapping("/add")
-    public ProjectSystemViewModel addProjectSystem(@RequestParam ProjectSystemBindModel bindModel,
+    public ProjectSystemViewModel addProjectSystem(@Valid @ModelAttribute ProjectSystemBindModel bindModel,
                                                    BindingResult bindingResult,
                                                    Authentication auth){
         if(bindingResult.hasErrors()){
             StringBuilder errorText = new StringBuilder("");
 
             for (ObjectError objectError : bindingResult.getAllErrors()) {
-                errorText.append(objectError.getObjectName()).append(": ").append(objectError.getDefaultMessage());
+                errorText.append(objectError.getDefaultMessage());
             }
             throw new BindingModelException(errorText.toString());
         }
-
         return this.projectSystemsService.addSystem(auth.getName(),bindModel);
     }
 

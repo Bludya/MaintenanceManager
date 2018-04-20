@@ -18,6 +18,7 @@ public class SecurityConstants {
             "/users/find/{searchWord}",
             "/users/activate",
             "/users/deactivate",
-            "/users/delete"
+            "/users/delete",
+            "/"
     };
 }

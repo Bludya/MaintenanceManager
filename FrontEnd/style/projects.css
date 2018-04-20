@@ -1,0 +1,167 @@
+
+.showProjects {
+  margin: 0 auto;
+  padding-bottom: 50px;
+}
+
+.projectPreview {
+  margin: 0px 20px 20px 20px;
+  padding: 5px 10px 40px 10px;
+  color: white;
+  border-radius: 20px;
+}
+
+.true {
+  background: #1ABC9C;
+}
+
+.false {
+  background: grey;
+}
+
+.false .button {
+  background: #436189;
+}
+
+.projectPreview > h3 {
+  margin: 30px;
+}
+
+.projectPreview > a {
+  background: #00449c;
+  margin: 100px 0 0px 0px;
+  padding: 15px;
+  color: white;
+}
+
+.projectPreview > a:hover {
+  background: white;
+  color: black;
+}
+
+.addProject {
+  margin: 0 auto;
+  font-size: 6em;
+  color: #1ABC9C;
+}
+
+.linkDiv {
+  margin: 40px 20px 20px 20px;
+  padding: 5px 10px 40px 10px;
+}
+
+.projectProfile {
+  position: relative;
+  margin-top: 20px
+}
+
+
+
+.basicInfo {
+  display: inline-block;
+  text-align: left;
+  border-right: 1px solid grey;
+}
+
+.basicInfo a {
+  float: right;
+  text-align: center;
+}
+
+.basicInfo .row {
+  text-align: left;
+  margin-right: 10px;
+  margin-top: 10px;
+  border-bottom: 1px solid grey;
+}
+
+.basicInfo h1, .basicInfo h2, .basicInfo h3 {
+    display: inline;
+}
+
+.basicInfo h1 span {
+  font-size: 0.5em;
+  color: grey;
+}
+
+
+.basicInfo span {
+  margin-left: 20px;
+}
+
+.systems {
+  text-align: left;
+}
+
+.systems>ul {
+  padding-left: 20px
+}
+
+.systems>ul>li {
+  color: black;
+  font-size: 1.5em;
+  font-weight: normal;
+}
+
+.actions {
+  padding-bottom: 50px;
+}
+
+.actions .row {
+  margin-bottom: 20px;
+}
+
+
+/* Popup container */
+.myPopup {
+   position: absolute;
+   display: inline-block;
+   top: 10%;
+   left: 25%;
+   right: 20%;
+   margin-left: -80px;
+}
+
+#addProjectForm, .popuptext {
+  visibility: hidden;
+}
+
+#addProjectForm {
+  margin: 0 auto;
+  float: none;
+}
+
+/* The actual popup (appears on top) */
+.myPopup .popuptext {
+  visibility: hidden;
+   text-align: center;
+   border-radius: 6px;
+   padding: 8px 0;
+}
+
+.window-close {
+   z-index: 2;
+  font-size: 2em;
+  color: black;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+#addProject .show , #projectInfo .show{
+   visibility: visible;
+    z-index: 1;
+   -webkit-animation: fadeIn 1s;
+   animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+   from {opacity: 0;}
+   to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+   from {opacity: 0;}
+   to {opacity:1 ;}
+}
