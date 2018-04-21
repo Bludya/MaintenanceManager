@@ -4,10 +4,11 @@ import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.notes.model.entity.Note;
 import org.softuni.maintenancemanager.projects.model.entity.Project;
 import org.softuni.maintenancemanager.tickets.model.entity.Ticket;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -22,10 +23,12 @@ public class Task {
     private String info;
 
     @Column(name = "date_created")
-    private Date dateCreated;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    protected LocalDate dateCreated;
 
     @Column(name = "deadline")
-    private Date deadline;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate deadline;
 
     @Column(name = "completed")
     private Boolean completed;
@@ -65,19 +68,15 @@ public class Task {
         this.info = info;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDeadline() {
+    public LocalDate getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 

@@ -119,6 +119,11 @@ public class ProjectServiceImpl implements ProjectService {
         return deletedRows;
     }
 
+    @Override
+    public Project getProjectByProjectName(String projectName) {
+        return this.projectRepository.getByProjectName(projectName);
+    }
+
     private ProjectViewModel mapProjectToView(Project project){
         ProjectViewModel pvm = modelMapper.map(project, ProjectViewModel.class);
         pvm.setSystems(

@@ -1,5 +1,6 @@
 package org.softuni.maintenancemanager.tickets.model.entity;
 
+import org.hibernate.annotations.Type;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.notes.model.entity.Note;
 import org.softuni.maintenancemanager.projects.model.entity.Project;
@@ -22,9 +23,11 @@ public class Ticket {
     private String ticket_text;
 
     @Column(name = "date_opened")
+    @Type(type="date")
     private Date dateOpened;
 
     @Column(name = "date_closed")
+    @Type(type="date")
     private Date dateClosed;
 
     @Column(name = "closed")

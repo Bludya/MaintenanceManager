@@ -34,4 +34,6 @@ public interface UserService extends UserDetailsService {
     List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord);
 
     User getUserByUsername(String username);
+
+    Set<User> getUsersByUsernames(Set<String> usernames);
 }

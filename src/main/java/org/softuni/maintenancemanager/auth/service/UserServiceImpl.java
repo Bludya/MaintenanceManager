@@ -196,4 +196,9 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return this.usersRepository.getByUsername(username);
     }
+
+    @Override
+    public Set<User> getUsersByUsernames(Set<String> usernames) {
+        return this.usersRepository.getAllByUsernameIn(usernames);
+    }
 }

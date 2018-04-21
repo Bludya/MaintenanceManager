@@ -1,0 +1,42 @@
+<section id="addTask" class="bigView">
+  <form id="addTaskForm" class="form-horizontal col-sm-12" action="#/addTask" method="post">
+    <h2>New Task</h2>
+    <div class="row">
+      <div class="form-group col-sm-4">
+        <label for="selectProject" class="control-label col-sm-6">Select project:</label>
+        <div class="col-sm-6">
+          <select class="form-control"  name="projectName" id="selectProject">
+            {{#each projects}}
+            <option>{{projectName}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      <div class="form-group col-sm-4">
+       <label for="selectManager" class="control-label col-sm-6">Select employee:</label>
+       <div class="col-sm-6">
+         <select class="form-control"  name="employee" id="selectEmployee">
+           {{#each users}}
+           <option>{{username}}</option>
+           {{/each}}
+         </select>
+       </div>
+      </div>
+      <div class="form-group col-sm-4">
+       <label for="deadline" class="control-label col-sm-6">Deadline:</label>
+       <div class="col-sm-6">
+         <input class="form-control"  name="deadline" id="deadline" type="date"/>
+       </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-sm-12">
+        <label for="info" class="control-label col-sm-2">Task info:</label>
+        <div class="col-sm-8">
+          <textarea class="form-control" id="info"  name="info" type="textarea" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+    <input class="form-button" id="btnSubmit" value="Add Task" type="submit"/>
+  </form>
+</section>

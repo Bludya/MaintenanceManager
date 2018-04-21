@@ -1,5 +1,6 @@
 package org.softuni.maintenancemanager.projects.model.entity;
 
+import org.hibernate.annotations.Type;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.notes.model.entity.Note;
 import org.softuni.maintenancemanager.tasks.model.entity.Task;
@@ -27,6 +28,7 @@ public class Project {
     private String information;
 
     @Column(name = "date_created")
+    @Type(type="date")
     private Date dateCreated;
 
     @Column(name = "active")

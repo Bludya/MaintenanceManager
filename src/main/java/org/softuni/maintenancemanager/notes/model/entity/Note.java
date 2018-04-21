@@ -1,5 +1,6 @@
 package org.softuni.maintenancemanager.notes.model.entity;
 
+import org.hibernate.annotations.Type;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class Note {
     private String text;
 
     @Column(name = "date_written")
+    @Type(type="date")
     private Date dateWritten;
 
     @ManyToOne

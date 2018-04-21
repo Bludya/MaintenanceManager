@@ -423,7 +423,66 @@ $(() => {
     })
 
     this.get('#/tasks', function (ctx){
+      requester.get(
+        '/tasks/my',
+        function (myTasks){
+          console.log(myTasks);
+          requester.get(
+            '/tasks/completed/false',
+            function (activeTasks){
+              console.log(activeTasks);
+              requester.get(
+                '/tasks/completed/true',
+                function (completedTasks){
+                  console.log(completedTasks);
+                }
+              )
+            }
+          )
+        }
+      )
       loadPage(ctx, '/tasks/show');
+    })
+
+    this.get('#/addTask', function (ctx){
+      if(!checkAccessible(ctx, "MANAGER")){
+        return;
+      }
+      requester.get(
+        '/users/all',
+        function thenFunc(users){
+          ctx.users = users;
+          requester.get(
+            '/projects/all',
+            function thenFUnc(projects){
+              ctx.projects = projects;
+              loadPage(ctx, '/tasks/addTask')
+            },
+            function failFunc(){
+              showError('Projects could not be loaded.');
+            }
+          )
+
+        },
+        function failFunc(){
+          showError('Users could not be loaded.');
+        }
+      )
+    })
+
+    this.post('#/addTask', function (ctx){
+      if(!checkAccessible(ctx, "MANAGER")){
+        return;
+      }
+      let {projectName, employee, deadline, info} = ctx.params;
+
+      requester.post(
+        '/tasks/add',
+        {projectName, employee, deadline, info},
+        function thenFunc(data){
+          ctx.redirect('#/tasks')
+        }
+      )
     })
   });
   app.run();

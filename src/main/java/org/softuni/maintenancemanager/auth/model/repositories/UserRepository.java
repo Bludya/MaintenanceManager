@@ -34,4 +34,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     @Transactional
     void deleteByUsername(String username);
+
+    Set<User> getAllByUsernameIn(Set<String> usernames);
 }

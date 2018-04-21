@@ -2,6 +2,7 @@ package org.softuni.maintenancemanager.projects.service.interfaces;
 
 import org.softuni.maintenancemanager.projects.model.dtos.binding.ProjectFullModel;
 import org.softuni.maintenancemanager.projects.model.dtos.view.ProjectViewModel;
+import org.softuni.maintenancemanager.projects.model.entity.Project;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,4 +21,6 @@ public interface ProjectService {
 
     @Transactional
     Long deleteProject(String userName, String projectName);
+
+    Project getProjectByProjectName(String projectName);
 }

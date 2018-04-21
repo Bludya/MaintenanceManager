@@ -20,13 +20,13 @@ let requester = (() => {
     function defaultFailFunc(data, a, b){
       let error = data['error'];
       let errorMessage = "Unknown error.";
-
-      if(data.responseJSON.status == 403){
-        errorMessage = unauthorizedMessage;
-      }else if (data.responseJSON.status ==500) {
-        errorMessage = internalServerError;
+      if(data.responseJSON != null){
+        if(data.responseJSON.status == 403){
+          errorMessage = unauthorizedMessage;
+        }else if (data.responseJSON.status == 500) {
+          errorMessage = internalServerError;
+        }
       }
-
       showError(errorMessage);
     }
 
@@ -42,6 +42,9 @@ let requester = (() => {
     }
 
     function post (url, data, thenFunc, failFunc) {
+      if(failFunc == null){
+        failFunc = defaultFailFunc;
+      }
         let req = makeRequest('POST', url, data);
         $.ajax(req)
           .then(thenFunc)
@@ -49,6 +52,9 @@ let requester = (() => {
     }
 
     function loginPost (data, thenFunc, failFunc) {
+      if(failFunc == null){
+        failFunc = defaultFailFunc;
+      }
         let req = makeRequest('POST', '/login', JSON.stringify(data));
         req.contentType = 'text/plain';
         $.ajax(req)
@@ -57,6 +63,9 @@ let requester = (() => {
     }
 
     function update (url, data, thenFunc, failFunc) {
+      if(failFunc == null){
+        failFunc = defaultFailFunc;
+      }
         let req = makeRequest('PUT', url, data);
         $.ajax(req)
           .then(thenFunc)
@@ -64,6 +73,9 @@ let requester = (() => {
     }
 
     function remove (url, thenFunc, failFunc) {
+      if(failFunc == null){
+        failFunc = defaultFailFunc;
+      }
         $.ajax(makeRequest('DELETE', url))
           .then(thenFunc)
           .fail(failFunc);
