@@ -15,4 +15,10 @@ public interface TaskService {
     Set<TaskBasicViewModel> getUsersTasks(String username);
 
     Set<TaskBasicViewModel> getByCompleted(Boolean completed);
+
+    TaskViewModel getTaskById(Long id);
+
+    TaskViewModel finishTask(String name, Long id, String closingNote);
+
+    TaskViewModel addNote(String name, Long id, String note);
 }

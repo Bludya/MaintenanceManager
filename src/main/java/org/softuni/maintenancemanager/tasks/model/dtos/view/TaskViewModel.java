@@ -1,9 +1,7 @@
 package org.softuni.maintenancemanager.tasks.model.dtos.view;
 
 import org.softuni.maintenancemanager.notes.model.dtos.view.NoteViewModel;
-import org.softuni.maintenancemanager.projects.model.entity.Project;
 import org.softuni.maintenancemanager.tasks.model.entity.Task;
-import org.softuni.maintenancemanager.tickets.model.entity.Ticket;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.time.LocalDate;
@@ -15,17 +13,25 @@ public class TaskViewModel {
 
     private String info;
 
-    protected LocalDate dateCreated;
+    private LocalDate dateCreated;
 
     private LocalDate deadline;
 
     private Boolean completed;
 
+    private LocalDate completionDate;
+
+    private String completionNote;
+
+    private String userCompleted;
+
     private Set<String> assignedWorkers;
 
-    private Project project;
+    private String projectName;
 
-    private Ticket ticket;
+    private Long ticketId;
+
+    private String author;
 
     private Set<NoteViewModel> notes;
 
@@ -64,6 +70,22 @@ public class TaskViewModel {
         this.deadline = deadline;
     }
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
+    }
+
     public Boolean getCompleted() {
         return completed;
     }
@@ -80,20 +102,36 @@ public class TaskViewModel {
         this.assignedWorkers = assignedWorkers;
     }
 
-    public Project getProject() {
-        return project;
+    public String getCompletionNote() {
+        return completionNote;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setCompletionNote(String completionNote) {
+        this.completionNote = completionNote;
     }
 
-    public Ticket getTicket() {
-        return ticket;
+    public LocalDate getCompletionDate() {
+        return completionDate;
     }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
+    public void setCompletionDate(LocalDate completionDate) {
+        this.completionDate = completionDate;
+    }
+
+    public String getUserCompleted() {
+        return userCompleted;
+    }
+
+    public void setUserCompleted(String userCompleted) {
+        this.userCompleted = userCompleted;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public Set<NoteViewModel> getNotes() {
@@ -103,5 +141,4 @@ public class TaskViewModel {
     public void setNotes(Set<NoteViewModel> notes) {
         this.notes = notes;
     }
-
 }

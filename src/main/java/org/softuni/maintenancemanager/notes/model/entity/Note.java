@@ -1,10 +1,9 @@
 package org.softuni.maintenancemanager.notes.model.entity;
 
-import org.hibernate.annotations.Type;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "notes")
@@ -17,8 +16,8 @@ public class Note {
     private String text;
 
     @Column(name = "date_written")
-    @Type(type="date")
-    private Date dateWritten;
+
+    private LocalDate dateWritten;
 
     @ManyToOne
     private User author;
@@ -38,11 +37,11 @@ public class Note {
         this.text = text;
     }
 
-    public Date getDateWritten() {
+    public LocalDate getDateWritten() {
         return dateWritten;
     }
 
-    public void setDateWritten(Date dateWritten) {
+    public void setDateWritten(LocalDate dateWritten) {
         this.dateWritten = dateWritten;
     }
 

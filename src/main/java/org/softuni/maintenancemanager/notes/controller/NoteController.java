@@ -1,6 +1,5 @@
 package org.softuni.maintenancemanager.notes.controller;
 
-import org.softuni.maintenancemanager.notes.model.dtos.binding.NoteBindModel;
 import org.softuni.maintenancemanager.notes.service.interfaces.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,12 +26,6 @@ public class NoteController {
         return this.notesService.getBySearchWord(searchWord);
     }
 
-    @PostMapping("/add")
-    public Object addNote(@RequestParam NoteBindModel noteBindModel,
-                          Authentication authentication) {
-        return this.notesService.addNote(authentication.getName(), noteBindModel);
-    }
-
     @DeleteMapping("/delete/{id}")
     public Object deleteNote(@PathVariable Long id,
                              Authentication authentication) {
@@ -41,8 +34,8 @@ public class NoteController {
 
     @PutMapping("/edit/{id}")
     public Object editNote(@PathVariable Long id,
-                           @RequestParam NoteBindModel noteBindModel,
+                           @RequestParam String noteText,
                            Authentication authentication) {
-        return this.notesService.editNote(authentication.getName(), noteBindModel, id);
+        return this.notesService.editNote(authentication.getName(), noteText, id);
     }
 }

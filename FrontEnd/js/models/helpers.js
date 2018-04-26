@@ -77,8 +77,11 @@
       form.classList.toggle("show");
     }
 
-    function showField(button, attribute){
-      let row = $(button).parent();
-      let popup = document.getElementById("myPopup");
+    function showField(attribute){
+      let popup = document.getElementById(attribute);
       popup.classList.toggle("show");
+    }
+
+    function customLink(href) {
+          window.location = href;
     }

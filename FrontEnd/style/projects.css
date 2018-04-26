@@ -122,7 +122,7 @@
    margin-left: -80px;
 }
 
-#addProjectForm, .popuptext {
+#addProjectForm, #addProject .popuptext {
   visibility: hidden;
 }
 

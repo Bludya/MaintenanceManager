@@ -2,6 +2,7 @@ package org.softuni.maintenancemanager.tasks.controller;
 
 import org.softuni.maintenancemanager.tasks.model.dtos.binding.TaskBindModel;
 import org.softuni.maintenancemanager.tasks.model.dtos.view.TaskBasicViewModel;
+import org.softuni.maintenancemanager.tasks.model.dtos.view.TaskViewModel;
 import org.softuni.maintenancemanager.tasks.service.interfaces.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -44,5 +45,24 @@ public class TaskController {
     @GetMapping("/my")
     public Set<TaskBasicViewModel> getMyTasks(Authentication auth){
         return this.taskService.getUsersTasks(auth.getName());
+    }
+
+    @GetMapping("/get/{id}")
+    public TaskViewModel getOneTask(@PathVariable Long id){
+        return this.taskService.getTaskById(id);
+    }
+
+    @PostMapping("/finish")
+    public TaskViewModel finishTask(@RequestParam Long id,
+                                    @RequestParam String closingNote,
+                                    Authentication auth){
+        return this.taskService.finishTask(auth.getName(), id, closingNote);
+    }
+
+    @PostMapping("/addNote")
+    public TaskViewModel addNote(@RequestParam Long id,
+                                 @RequestParam String note,
+                                 Authentication auth){
+        return this.taskService.addNote(auth.getName(), id, note);
     }
 }

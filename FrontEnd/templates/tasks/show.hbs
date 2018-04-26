@@ -1,40 +1,82 @@
-<section id="tasks" class="bigView">
+<section id="tasks" class="bigView col-sm-12">
+  <div class="tasks col-sm-12">
   {{#ifContains roles "MANAGER"}}
   <a href="#/addTask" class="button">Add Task</a>
   {{/ifContains}}
+
   <div class="row my-tasks">
     <h1>My tasks</h1>
-    <div class="table-responsive">
-    <table class="table table-striped table-hover  table-condensed">
+    <div class="table-responsive overflow">
+    <table class="table table-striped table-hover">
       <thead class="thead-dark">
         <tr>
-          <th>User</th>
-          <th>Activity</th>
-          <th>Time of occurance</th>
+          <th class="col-sm-1">Project</th>
+          <th class="col-sm-9">Task</th>
+          <th class="col-sm-2">Deadline</th>
         </tr>
       </thead>
       <tbody>
-        {{#each logs}}
-          <tr>
-            <td>{{user}}</td>
-            <td>{{activity}}</td>
-            <td>{{timeOfOccurrence}}</td>
+        {{#each myTasks}}
+          <tr class='clickable-row' onclick="customLink('#/tasks/{{id}}')">
+            <td>{{projectName}}</td>
+            <td>{{info}}</td>
+            <td>{{deadline}}</td>
           </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
   </div>
-
+  <hr></hr>
   {{#ifContains roles "MANAGER"}}
   <div class="row all-tasks-active">
     <h1>All active tasks</h1>
-    <hr></hr>
+    <div class="table-responsive overflow">
+    <table class="table table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th class="col-sm-1">Project</th>
+          <th class="col-sm-9">Task</th>
+          <th class="col-sm-2">Deadline</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each activeTasks}}
+          <tr class='clickable-row' onclick="customLink('#/tasks/{{id}}')">
+            <td>{{projectName}}</td>
+            <td>{{info}}</td>
+            <td>{{deadline}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
-
+</div>
+  <hr></hr>
   <div class="row all-tasks-finished">
     <h1>All finished tasks</h1>
-    <hr></hr>
+    <div class="table-responsive overflow">
+    <table class="table table-striped table-hover  table-condensed">
+      <thead class="thead-dark">
+        <tr>
+          <th class="col-sm-1">Project</th>
+          <th class="col-sm-9">Task</th>
+          <th class="col-sm-2">Deadline</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each completedTasks}}
+          <tr class='clickable-row' onclick="customLink('#/tasks/{{id}}')">
+            <td>{{projectName}}</td>
+            <td>{{info}}</td>
+            <td>{{deadline}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
+</div>
+  <hr></hr>
   {{/ifContains}}
+</div>
 </section>

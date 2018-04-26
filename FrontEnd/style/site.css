@@ -7,8 +7,8 @@ a, a:hover{
     text-decoration: none;
 }
 
-a.button{
-
+.button{
+  cursor: pointer;
 }
 
 
@@ -19,6 +19,10 @@ div {
 a,button, li {
   font-weight: bold;
   color: #ffffff;
+}
+
+.window-close{
+  cursor: pointer;
 }
 
 
@@ -51,8 +55,11 @@ section{
 }
 
 .bigView{
-      height: 70%;
-      padding-top: 20px;
+      height: 80%;
+      margin-top:100px;
+}
+.bigView>div{
+      margin-botttom:100px;
 }
 
 tr{
@@ -132,4 +139,13 @@ th{
 #viewUsers .button{
   display: inline-block;
   margin: 0 10px 0 10px;
+}
+
+.overflow {
+  height: 200px;
+  overflow: auto;
+}
+
+.clickable-row {
+  cursor: pointer;
 }

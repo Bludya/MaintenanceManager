@@ -5,6 +5,8 @@ import java.time.LocalDate;
 public class TaskBasicViewModel {
     private Long id;
 
+    private String projectName;
+
     private String info;
 
     private LocalDate deadline;
@@ -34,5 +36,13 @@ public class TaskBasicViewModel {
 
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

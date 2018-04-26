@@ -1,0 +1,80 @@
+#showTask > .task {
+  background: #1ABC9C;
+  padding: 10px 50px 30px 50px;
+  z-index: -1;
+}
+
+#showTask li{
+  list-style-type: none;
+  color: inherit;
+}
+
+#showTask > .task > .header > h3{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 0;
+}
+
+#showTask > .task .right-col,
+#showTask > .task .left-col,
+#showTask > .task .main-col,
+#showTask > .task > .header{
+  margin-top: 10px;
+  background: #00FF93;
+  border-radius: 10px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+#showTask > .task .button{
+  background: #00FF93;
+  padding: 15px;
+}
+
+#showTask .myPopup {
+  z-index: -1;
+}
+/* The actual popup (appears on top) */
+#myPopup {
+ border: 1px solid;
+ position: absolute;
+ display: inline-block;
+ top: 10%;
+ left: 25%;
+ right: 20%;
+ margin-left: -80px;
+ visibility: hidden;
+ text-align: center;
+ border-radius: 6px;
+}
+
+#noteAdder {
+ margin: 20px;
+ visibility: hidden;
+ text-align: center;
+ border-radius: 6px;
+}
+
+#myPopup form {
+  margin: 0;
+}
+
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+#showTask >.show{
+   visibility: visible;
+   z-index: 1;
+   -webkit-animation: fadeIn 1s;
+   animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+   from {opacity: 0;}
+   to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+   from {opacity: 0;}
+   to {opacity:1 ;}
+}

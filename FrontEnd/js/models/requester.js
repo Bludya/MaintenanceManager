@@ -23,8 +23,12 @@ let requester = (() => {
       if(data.responseJSON != null){
         if(data.responseJSON.status == 403){
           errorMessage = unauthorizedMessage;
+        }else if (data.responseJSON.status == 404) {
+          errorMessage = notFound;
         }else if (data.responseJSON.status == 500) {
           errorMessage = internalServerError;
+        }else {
+          errorMessage = data.responseJSON.message;
         }
       }
       showError(errorMessage);

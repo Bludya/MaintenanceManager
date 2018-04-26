@@ -3,7 +3,6 @@ package org.softuni.maintenancemanager.notes.service;
 import org.modelmapper.ModelMapper;
 import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
-import org.softuni.maintenancemanager.notes.model.dtos.binding.NoteBindModel;
 import org.softuni.maintenancemanager.notes.model.dtos.view.NoteViewModel;
 import org.softuni.maintenancemanager.notes.model.entity.Note;
 import org.softuni.maintenancemanager.notes.model.repositories.NotesRepository;
@@ -42,16 +41,6 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public NoteViewModel addNote(String editor, NoteBindModel noteBindModel) {
-        Note note = new Note();
-        note.setText(noteBindModel.text);
-        this.notesRepository.save(note);
-
-        this.logger.addLog(editor, "Added note with id: " + note.getId());
-        return this.modelMapper.map(note, NoteViewModel.class);
-    }
-
-    @Override
     public String deleteNote(String editor, Long id) {
         if (this.notesRepository.existsById(id)) {
             throw new EntryNotFoundException();
@@ -64,7 +53,7 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public NoteViewModel editNote(String editor, NoteBindModel noteBindModel, Long id) {
+    public NoteViewModel editNote(String editor, String noteText, Long id) {
         Optional<Note> noteOptional = this.notesRepository.findById(id);
 
         if (!noteOptional.isPresent()) {
@@ -72,11 +61,11 @@ public class NotesServiceImpl implements NotesService {
         }
 
         Note note = noteOptional.get();
-        note.setText(noteBindModel.text);
+        note.setText(noteText);
 
         this.notesRepository.save(note);
 
-        this.logger.addLog(editor, "Added note with id: " + note.getId());
+        this.logger.addLog(editor, "Edited note with id: " + note.getId());
         return this.modelMapper.map(note, NoteViewModel.class);
     }
 }

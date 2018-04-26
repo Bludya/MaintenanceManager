@@ -423,25 +423,47 @@ $(() => {
     })
 
     this.get('#/tasks', function (ctx){
+      if(!checkAccessible(ctx, "")){
+        return;
+      }
+
       requester.get(
         '/tasks/my',
         function (myTasks){
-          console.log(myTasks);
+          ctx.myTasks = myTasks;
+
+          if(!checkAccessible(ctx, "MANAGER")){
+            loadPage(ctx, '/tasks/show');
+            return;
+          }
+
           requester.get(
             '/tasks/completed/false',
             function (activeTasks){
-              console.log(activeTasks);
+              ctx.activeTasks = activeTasks;
               requester.get(
                 '/tasks/completed/true',
                 function (completedTasks){
-                  console.log(completedTasks);
+                  ctx.completedTasks = completedTasks;
+                  loadPage(ctx, '/tasks/show');
+                },
+                function (error){
+                  loadPage(ctx, '/tasks/show');
+                  showError('Could not load finished tasks.')
                 }
               )
+            },
+            function (error){
+              loadPage(ctx, '/tasks/show');
+              showError('Could not load active tasks.')
             }
           )
+        },
+        function (error){
+          showError('Could not load you tasks.')
         }
       )
-      loadPage(ctx, '/tasks/show');
+
     })
 
     this.get('#/addTask', function (ctx){
@@ -474,7 +496,29 @@ $(() => {
       if(!checkAccessible(ctx, "MANAGER")){
         return;
       }
+
+
       let {projectName, employee, deadline, info} = ctx.params;
+
+      if(projectName.length < 1){
+        showError("Project can't be empty.")
+        return;
+      }
+
+      if(employee.length < 1){
+        showError("There should be at least one employee assigned.")
+        return;
+      }
+
+      if(deadline.length < 1){
+        showError("There should be a deadline.")
+        return;
+      }
+
+      if(info.length < 1){
+        showError("The info on the task can't be empty")
+        return;
+      }
 
       requester.post(
         '/tasks/add',
@@ -483,6 +527,57 @@ $(() => {
           ctx.redirect('#/tasks')
         }
       )
+    })
+
+    this.get('#/tasks/:id', function (ctx){
+      requester.get(
+        '/tasks/get/' + ctx.params.id,
+        function (task){
+          ctx.task = task;
+          loadPage(ctx, '/tasks/task');
+        }
+      )
+    })
+
+    this.post('#/completeTask/:id', function (ctx){
+      let closingNote = ctx.params.closingNote;
+      let id = ctx.params.id;
+
+      if(closingNote == null){
+        showError('Closing note is obligatory.')
+      }
+
+      requester.post(
+        '/tasks/finish',
+        {
+          'id': id,
+          'closingNote': closingNote
+        },
+        function (){
+          ctx.redirect('#/tasks');
+        }
+      )
+    })
+
+    this.post('#/addTaskNote/:id', function (ctx){
+      let note = ctx.params.note;
+      let id = ctx.params.id;
+
+      if(note.length < 1){
+        showError('The text of the note can not be empty.')
+      }
+
+      requester.post(
+        '/tasks/addNote',
+        {
+          'id': id,
+          'closingNote': closingNote
+        },
+        function (){
+          ctx.redirect('#/tasks');
+        }
+      )
+
     })
   });
   app.run();

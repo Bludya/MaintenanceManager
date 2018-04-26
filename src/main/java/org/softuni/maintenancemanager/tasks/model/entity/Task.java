@@ -24,7 +24,7 @@ public class Task {
 
     @Column(name = "date_created")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    protected LocalDate dateCreated;
+    private LocalDate dateCreated;
 
     @Column(name = "deadline")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -32,6 +32,16 @@ public class Task {
 
     @Column(name = "completed")
     private Boolean completed;
+
+    @Column(name = "completion_date")
+    private LocalDate completionDate;
+
+    @Column(name = "completion_note")
+    private String completionNote;
+
+
+    @ManyToOne
+    private User userCompleted;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -70,6 +80,10 @@ public class Task {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public LocalDate getDateCreated() {
+        return dateCreated;
     }
 
     public LocalDate getDeadline() {
@@ -126,5 +140,33 @@ public class Task {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public String getCompletionNote() {
+        return completionNote;
+    }
+
+    public void setCompletionNote(String completionNote) {
+        this.completionNote = completionNote;
+    }
+
+    public LocalDate getCompletionDate() {
+        return completionDate;
+    }
+
+    public void setCompletionDate(LocalDate completionDate) {
+        this.completionDate = completionDate;
+    }
+
+    public User getUserCompleted() {
+        return userCompleted;
+    }
+
+    public void setUserCompleted(User userCompleted) {
+        this.userCompleted = userCompleted;
+    }
+
+    public void addNote(Note note){
+        this.notes.add(note);
     }
 }
