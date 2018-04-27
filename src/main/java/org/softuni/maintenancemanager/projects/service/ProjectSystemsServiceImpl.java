@@ -1,6 +1,7 @@
 package org.softuni.maintenancemanager.projects.service;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
 import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.ProjectSystemAlreadyExistsException;
 import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.softuni.maintenancemanager.projects.model.dtos.binding.ProjectSystemBindModel;
@@ -32,8 +33,13 @@ public class ProjectSystemsServiceImpl implements ProjectSystemsService{
 
     @Override
     public ProjectSystemViewModel addSystem(String author, ProjectSystemBindModel projectSystemBindModel) {
+        try {
+            projectSystemBindModel = CharacterEscapes.escapeStringFields(projectSystemBindModel);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-        if(this.repository.existsByName(projectSystemBindModel.name)){
+        if(this.repository.existsByName(projectSystemBindModel.getName())){
             throw new ProjectSystemAlreadyExistsException();
         }
 
@@ -46,6 +52,8 @@ public class ProjectSystemsServiceImpl implements ProjectSystemsService{
 
     @Override
     public Set<ProjectSystem> getAllContainedIn(Set<String> systemNames) {
+        systemNames = systemNames.stream().map(CharacterEscapes::escapeString).collect(Collectors.toSet());
+
         return this.repository.findAllByNameIn(systemNames);
     }
 

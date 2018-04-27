@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserService extends UserDetailsService {
-    Object register(UserFullModel userDto);
+    UserViewModel register(UserFullModel userDto);
 
     boolean userExists(String email, String username);
 

@@ -1,13 +1,10 @@
 package org.softuni.maintenancemanager.tasks.model.dtos.view;
 
 import org.softuni.maintenancemanager.notes.model.dtos.view.NoteViewModel;
-import org.softuni.maintenancemanager.tasks.model.entity.Task;
-import org.springframework.data.rest.core.config.Projection;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-@Projection(types = Task.class, name = "taskViewModel")
 public class TaskViewModel {
     private Long id;
 

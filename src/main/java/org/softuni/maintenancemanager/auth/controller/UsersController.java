@@ -31,10 +31,6 @@ public class UsersController {
             throw new EntryCanNotBeCreated(bindingResult.getSuppressedFields());
         }
 
-        System.out.println(userDto.getEmail());
-        System.out.println(userDto.getUsername());
-        System.out.println(userDto.getPassword());
-        System.out.println(userDto.getRepeatPassword());
         return this.userService.register(userDto);
     }
 

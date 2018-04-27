@@ -8,9 +8,9 @@ public class ProjectSystemBindModel {
 
     @NotNull(message = EMPTY_NAME)
     @NotEmpty(message = EMPTY_NAME)
-    public String name;
+    private String name;
 
-    public String info;
+    private String info;
 
     public ProjectSystemBindModel() {
     }

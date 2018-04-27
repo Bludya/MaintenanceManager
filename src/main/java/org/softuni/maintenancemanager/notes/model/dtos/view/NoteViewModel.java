@@ -1,9 +1,6 @@
 package org.softuni.maintenancemanager.notes.model.dtos.view;
 
-import org.softuni.maintenancemanager.notes.model.entity.Note;
-import org.springframework.data.rest.core.config.Projection;
 
-@Projection(types = Note.class, name = "noteViewModel")
 public class NoteViewModel {
 
     private Long id;

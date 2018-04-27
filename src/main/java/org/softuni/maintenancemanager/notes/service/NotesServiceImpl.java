@@ -1,6 +1,7 @@
 package org.softuni.maintenancemanager.notes.service;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
 import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.softuni.maintenancemanager.notes.model.dtos.view.NoteViewModel;
@@ -32,16 +33,21 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public Set<NoteViewModel> getBySearchWord(String searchWord) {
+        searchWord = CharacterEscapes.escapeString(searchWord);
+
         return this.notesRepository.findAllByTextContains(searchWord);
     }
 
     @Override
     public Set<NoteViewModel> getByNotableId(String id) {
+        id = CharacterEscapes.escapeString(id);
         return this.notesRepository.findAllByAuthor_Id(id);
     }
 
     @Override
     public String deleteNote(String editor, Long id) {
+        editor = CharacterEscapes.escapeString(editor);
+
         if (this.notesRepository.existsById(id)) {
             throw new EntryNotFoundException();
         }
@@ -54,6 +60,9 @@ public class NotesServiceImpl implements NotesService {
 
     @Override
     public NoteViewModel editNote(String editor, String noteText, Long id) {
+        noteText = CharacterEscapes.escapeString(noteText);
+        editor = CharacterEscapes.escapeString(editor);
+
         Optional<Note> noteOptional = this.notesRepository.findById(id);
 
         if (!noteOptional.isPresent()) {

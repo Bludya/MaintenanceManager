@@ -1,6 +1,7 @@
 package org.softuni.maintenancemanager.tasks.service;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
 import org.softuni.maintenancemanager.errorHandling.exceptions.CantBeEmptyException;
@@ -47,12 +48,21 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public TaskViewModel addTask(String user, TaskBindModel taskDto, Set<String> employees) {
+        try {
+            taskDto = CharacterEscapes.escapeStringFields(taskDto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        employees = employees.stream().map(CharacterEscapes::escapeString).collect(Collectors.toSet());
+
         Task task = this.modelMapper.map(taskDto, Task.class);
         task.setAuthor(this.userService.getUserByUsername(user));
         task.setProject(this.projectService.getProjectByProjectName(taskDto.getProjectName()));
         task.setAssignedWorkers(this.userService.getUsersByUsernames(employees));
         task.setCompleted(false);
         task.setDateCreated(LocalDate.now());
+
         this.repository.save(task);
         this.logger.addLog(user, "Added task with id:" + task.getId());
         return null;
@@ -60,6 +70,8 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public Set<TaskBasicViewModel> getUsersTasks(String username) {
+        username = CharacterEscapes.escapeString(username);
+
         return this.repository.getForUser(username)
                 .stream()
                 .map(task -> this.modelMapper.map(task, TaskBasicViewModel.class))
@@ -85,6 +97,8 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public TaskViewModel finishTask(String username, Long id, String closingNote) {
+        closingNote = CharacterEscapes.escapeString(closingNote);
+
         Task task = this.getTask(id);
 
         if(task.getCompleted()){
@@ -108,6 +122,7 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public TaskViewModel addNote(String username, Long id, String noteText) {
+        noteText = CharacterEscapes.escapeString(noteText);
 
         if(noteText == null || noteText.equals("")){
             throw new CantBeEmptyException("Note");

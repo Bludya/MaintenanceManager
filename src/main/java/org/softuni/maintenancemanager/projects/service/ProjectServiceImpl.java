@@ -1,6 +1,7 @@
 package org.softuni.maintenancemanager.projects.service;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
 import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.ProjectExistsException;
@@ -63,6 +64,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectViewModel getByName(String name) {
+        name = CharacterEscapes.escapeString(name);
+
         Project project = this.projectRepository.getByProjectName(name);
 
         if(project == null){
@@ -74,6 +77,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectViewModel addProject(String author, ProjectFullModel projectBindModel, Set<String> systems) {
+
+        try {
+            projectBindModel = CharacterEscapes.escapeStringFields(projectBindModel);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        systems = systems.stream().map(CharacterEscapes::escapeString).collect(Collectors.toSet());
+
         if(this.projectRepository.existsByProjectName(projectBindModel.getProjectName())){
             throw new ProjectExistsException();
         }
@@ -89,6 +101,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectViewModel changeProjectActive(String author, String projectName, String action) {
+        action = CharacterEscapes.escapeString(action);
+        projectName = CharacterEscapes.escapeString(projectName);
+
         Project project = this.projectRepository.getByProjectName(projectName);
 
         if(project == null){
@@ -113,6 +128,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     public Long deleteProject(String userName, String projectName){
+        projectName = CharacterEscapes.escapeString(projectName);
+
         Long deletedRows = this.projectRepository.deleteByProjectName(projectName);
         this.logger.addLog(userName, "Deleted project with name: " + projectName);
 
@@ -121,6 +138,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project getProjectByProjectName(String projectName) {
+        projectName = CharacterEscapes.escapeString(projectName);
+
         return this.projectRepository.getByProjectName(projectName);
     }
 

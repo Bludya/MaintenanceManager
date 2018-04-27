@@ -8,9 +8,11 @@ import java.lang.reflect.Field;
 public class CharacterEscapes {
 
     public static <T> T escapeStringFields(T object) throws IllegalAccessException {
-        for (Field field : object.getClass().getFields()) {
-            if (field.getType() == String.class) {
-                field.set(String.class, escapeString((String) field.get(String.class)));
+        for (Field field : object.getClass().getDeclaredFields()) {
+            if (field.getType() == String.class && !java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
+                field.setAccessible(true);
+                field.set(object, escapeString((String) field.get(object)));
+                field.setAccessible(false);
             }
         }
         return object;

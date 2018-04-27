@@ -1,6 +1,7 @@
 package org.softuni.maintenancemanager.auth.service;
 
 import org.modelmapper.ModelMapper;
+import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
 import org.softuni.maintenancemanager.auth.model.dtos.binding.UserFullModel;
 import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
 import org.softuni.maintenancemanager.auth.model.entity.Role;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -56,7 +58,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object register(UserFullModel userDto) {
+    public UserViewModel register(UserFullModel userDto) {
+
+        try {
+            userDto = CharacterEscapes.escapeStringFields(userDto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         if (this.userExists(userDto.getEmail(), userDto.getUsername())) {
             throw new UserAlreadyExists();
         }
@@ -80,6 +89,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<UserViewModel> getAllByRole(String role) {
+
+        role = CharacterEscapes.escapeString(role);
+
         return this.usersRepository.findAllByRole(role).stream()
                 .map(this::mapUserViewModel)
                 .collect(Collectors.toSet());
@@ -87,6 +99,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserViewModel getById(String id) {
+
+        id = CharacterEscapes.escapeString(id);
+
         Optional<User> optionalUser = this.usersRepository.findById(id);
         if (!optionalUser.isPresent()) {
             throw new EntryNotFoundException();
@@ -97,6 +112,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserViewModel getByUsername(String username) {
+        username = CharacterEscapes.escapeString(username);
+
         if (!this.usersRepository.existsByUsername(username)) {
             throw new EntryNotFoundException();
         }
@@ -106,6 +123,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserViewModel edit(String editor, UserFullModel userDto, String id) {
+
+        id = CharacterEscapes.escapeString(id);
+
+        try {
+            userDto = CharacterEscapes.escapeStringFields(userDto);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         Optional<User> userOptional = this.usersRepository.findById(id);
 
         if (!userOptional.isPresent()) {
@@ -127,7 +153,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserViewModel deactivateUser(String editor, String username) {
-       User user= this.usersRepository.getByUsername(username);
+
+        username = CharacterEscapes.escapeString(username);
+
+        User user = this.usersRepository.getByUsername(username);
 
         if (user == null) {
             throw new EntryNotFoundException();
@@ -141,6 +170,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserViewModel activateUser(String editor, String username) {
+
+        username = CharacterEscapes.escapeString(username);
+
         User user = this.usersRepository.getByUsername(username);
 
         if (user == null) {
@@ -154,6 +186,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public void delete(String editor, String username) {
+        username = CharacterEscapes.escapeString(username);
+
         if (!usersRepository.existsByUsername(username)) {
             throw new EntryNotFoundException();
         }
@@ -163,8 +197,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //email = CharacterEscapes.escapeString(email);
+    public UserDetails loadUserByUsername(String username) {
+        username = CharacterEscapes.escapeString(username);
+
         User user = this.usersRepository.getByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("User doesn't exist");
@@ -173,20 +208,10 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private UserViewModel mapUserViewModel(User user) {
-        UserViewModel userViewModel = modelMapper.map(user, UserViewModel.class);
-        userViewModel.setRoles(
-                user.getRoles()
-                        .stream()
-                        .map(Role::getRoleName)
-                        .collect(Collectors.toSet())
-        );
-
-        return userViewModel;
-    }
-
     @Override
     public List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord) {
+        searchWord = CharacterEscapes.escapeString(searchWord);
+
         return this.usersRepository.findAllByUsernameContainsOrEmailContainsOrderByIsEnabledAsc(searchWord, searchWord).stream()
                 .map(this::mapUserViewModel)
                 .collect(Collectors.toList());
@@ -194,11 +219,40 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUsername(String username) {
-        return this.usersRepository.getByUsername(username);
+        username = CharacterEscapes.escapeString(username);
+
+        User user = this.usersRepository.getByUsername(username);
+        if(user == null){
+            throw new UsernameNotFoundException("User does not exist.");
+        }
+
+        return user;
     }
 
     @Override
     public Set<User> getUsersByUsernames(Set<String> usernames) {
+        usernames = usernames.stream().map(CharacterEscapes::escapeString).collect(Collectors.toSet());
+
+        if(usernames == null){
+            usernames = new HashSet<>();
+        }
+
         return this.usersRepository.getAllByUsernameIn(usernames);
     }
+
+    private UserViewModel mapUserViewModel(User user) {
+        UserViewModel userViewModel = modelMapper.map(user, UserViewModel.class);
+        try {
+            userViewModel.setRoles(
+                    user.getRoles()
+                            .stream()
+                            .map(Role::getRoleName)
+                            .collect(Collectors.toSet())
+            );
+        }catch (NullPointerException npe){
+            userViewModel.setRoles(new HashSet<>());
+        }
+        return userViewModel;
+    }
+
 }
