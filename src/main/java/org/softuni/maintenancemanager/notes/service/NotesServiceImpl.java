@@ -2,6 +2,7 @@ package org.softuni.maintenancemanager.notes.service;
 
 import org.modelmapper.ModelMapper;
 import org.softuni.maintenancemanager.appUtils.CharacterEscapes;
+import org.softuni.maintenancemanager.errorHandling.exceptions.CantBeEmptyException;
 import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.softuni.maintenancemanager.notes.model.dtos.view.NoteViewModel;
@@ -11,6 +12,7 @@ import org.softuni.maintenancemanager.notes.service.interfaces.NotesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
@@ -76,5 +78,23 @@ public class NotesServiceImpl implements NotesService {
 
         this.logger.addLog(editor, "Edited note with id: " + note.getId());
         return this.modelMapper.map(note, NoteViewModel.class);
+    }
+
+    @Override
+    public Note createNote(String author, String noteText){
+
+        if(noteText == null || noteText.equals("")){
+            throw new CantBeEmptyException("Note");
+        }
+
+        noteText = CharacterEscapes.escapeString(noteText);
+
+        Note note = new Note();
+        note.setText(noteText);
+        note.setDateWritten(LocalDate.now());
+
+        this.notesRepository.save(note);
+        this.logger.addLog(author, "Added new note.");
+        return note;
     }
 }

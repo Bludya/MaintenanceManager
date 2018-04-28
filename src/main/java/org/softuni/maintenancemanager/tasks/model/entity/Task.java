@@ -14,6 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tasks")
 public class Task {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false)
@@ -57,7 +58,7 @@ public class Task {
     @ManyToOne
     private Ticket ticket;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Note> notes;
 
     @ManyToOne

@@ -10,6 +10,7 @@ import org.softuni.maintenancemanager.errorHandling.exceptions.TaskAlreadyClosed
 import org.softuni.maintenancemanager.logger.service.interfaces.Logger;
 import org.softuni.maintenancemanager.notes.model.dtos.view.NoteViewModel;
 import org.softuni.maintenancemanager.notes.model.entity.Note;
+import org.softuni.maintenancemanager.notes.service.interfaces.NotesService;
 import org.softuni.maintenancemanager.projects.service.interfaces.ProjectService;
 import org.softuni.maintenancemanager.tasks.model.dtos.binding.TaskBindModel;
 import org.softuni.maintenancemanager.tasks.model.dtos.view.TaskBasicViewModel;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService{
     private TaskRepository repository;
+    private NotesService notesService;
     private UserService userService;
     private ProjectService projectService;
     private Logger logger;
@@ -35,11 +37,13 @@ public class TaskServiceImpl implements TaskService{
 
     @Autowired
     public TaskServiceImpl(TaskRepository repository,
+                           NotesService notesService,
                            UserService userService,
                            ProjectService projectService,
                            Logger logger,
                            ModelMapper modelMapper) {
         this.repository = repository;
+        this.notesService = notesService;
         this.userService = userService;
         this.projectService =projectService;
         this.logger = logger;
@@ -122,19 +126,10 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public TaskViewModel addNote(String username, Long id, String noteText) {
-        noteText = CharacterEscapes.escapeString(noteText);
-
-        if(noteText == null || noteText.equals("")){
-            throw new CantBeEmptyException("Note");
-        }
-
-
         Task task = this.getTask(id);
 
-        Note note = new Note();
-        note.setText(noteText);
+        Note note = this.notesService.createNote(username, noteText);
         note.setAuthor(this.userService.getUserByUsername(username));
-        note.setDateWritten(LocalDate.now());
 
         task.addNote(note);
 
