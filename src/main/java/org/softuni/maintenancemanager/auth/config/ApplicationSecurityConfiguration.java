@@ -13,8 +13,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import static org.softuni.maintenancemanager.auth.config.SecurityConstants.ADMIN_URLS;
-import static org.softuni.maintenancemanager.auth.config.SecurityConstants.SIGN_UP_URL;
+import static org.softuni.maintenancemanager.auth.config.SecurityConstants.*;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +33,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
                 .antMatchers(ADMIN_URLS).hasAuthority("ROLE_ADMIN")
+                .antMatchers(MANAGER_URLS).hasAuthority("ROLE_MANAGER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

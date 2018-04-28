@@ -19,6 +19,15 @@ public class SecurityConstants {
             "/users/activate",
             "/users/deactivate",
             "/users/delete",
+            "/users/change-role",
+            "/logs/all",
             "/"
+    };
+
+    public static final String[] MANAGER_URLS = {
+            "/tasks/add",
+            "/projects/action",
+            "/projects/delete",
+            "/project-systems/add",
     };
 }
