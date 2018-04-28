@@ -59,7 +59,7 @@
         return false;
       }
 
-      if(role != null){
+      if(role != null && role != ''){
         if(sessionStorage.roles != null && !sessionStorage.roles.includes(role)){
           showError("You don't have access to this.");
           return false;

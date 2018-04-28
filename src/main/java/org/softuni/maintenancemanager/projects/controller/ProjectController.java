@@ -42,6 +42,11 @@ public class ProjectController {
         return this.projectService.getAll();
     }
 
+    @GetMapping("/active/all")
+    public Set<ProjectViewModel> activeProjects(){
+        return this.projectService.getActive();
+    }
+
     @GetMapping("/{projectName}")
     public ProjectViewModel getProject(@PathVariable String projectName){
         return this.projectService.getByName(projectName);

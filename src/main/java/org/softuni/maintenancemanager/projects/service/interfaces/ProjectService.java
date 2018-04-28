@@ -9,9 +9,12 @@ import javax.transaction.Transactional;
 import java.util.Set;
 
 @Service
+@Transactional
 public interface ProjectService {
 
     Set<ProjectViewModel> getAll();
+
+    Set<ProjectViewModel> getActive();
 
     ProjectViewModel getByName(String name);
 
@@ -19,7 +22,7 @@ public interface ProjectService {
 
     ProjectViewModel changeProjectActive(String author, String projectName, String action);
 
-    @Transactional
+
     Long deleteProject(String userName, String projectName);
 
     Project getProjectByProjectName(String projectName);

@@ -4,12 +4,14 @@ import org.softuni.maintenancemanager.projects.model.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.HashSet;
+import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:8080")
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    HashSet<Project> getAllByOrderByProjectNameDesc();
+    Set<Project> getAllByActiveTrueOrderByProjectNameDesc();
+
+    Set<Project> getAllByOrderByProjectNameDesc();
 
     boolean existsByProjectName(String projectName);
 

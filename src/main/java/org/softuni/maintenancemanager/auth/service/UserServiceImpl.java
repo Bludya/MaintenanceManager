@@ -7,6 +7,7 @@ import org.softuni.maintenancemanager.auth.model.dtos.view.UserViewModel;
 import org.softuni.maintenancemanager.auth.model.entity.Role;
 import org.softuni.maintenancemanager.auth.model.entity.User;
 import org.softuni.maintenancemanager.auth.model.repositories.UserRepository;
+import org.softuni.maintenancemanager.auth.service.interfaces.RoleService;
 import org.softuni.maintenancemanager.auth.service.interfaces.UserService;
 import org.softuni.maintenancemanager.errorHandling.exceptions.EntryNotFoundException;
 import org.softuni.maintenancemanager.errorHandling.exceptions.entryExistsExceptions.UserAlreadyExists;
@@ -31,6 +32,8 @@ public class UserServiceImpl implements UserService {
 
     private ModelMapper modelMapper;
 
+    private RoleService roleService;
+
     private UserRepository usersRepository;
 
     private Logger logger;
@@ -39,10 +42,12 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(
             BCryptPasswordEncoder bCryptPasswordEncoder,
             ModelMapper modelMapper,
+            RoleService roleService,
             UserRepository usersRepository,
             Logger logger) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
+        this.roleService = roleService;
         this.usersRepository = usersRepository;
         this.logger = logger;
     }
@@ -85,6 +90,32 @@ public class UserServiceImpl implements UserService {
                 .map(this::mapUserViewModel)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public UserViewModel changeUserRole(String editor, String userName, String roleName){
+        userName = CharacterEscapes.escapeString(userName);
+        roleName = CharacterEscapes.escapeString(roleName);
+
+        User user = this.usersRepository.getByUsername(userName);
+
+        if(user == null){
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        Role role = this.roleService.getRoleByRoleName(roleName);
+
+        if(role == null){
+            throw new EntryNotFoundException();
+        }
+
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+
+        this.usersRepository.save(user);
+
+        return this.mapUserViewModel(user);
     }
 
     @Override

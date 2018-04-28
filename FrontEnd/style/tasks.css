@@ -29,6 +29,9 @@
 #showTask > .task .button{
   background: #00FF93;
   padding: 15px;
+    display: inline-block;
+    height: inherit;
+    width: inherit;
 }
 
 #showTask .myPopup {
@@ -77,4 +80,8 @@
 @keyframes fadeIn {
    from {opacity: 0;}
    to {opacity:1 ;}
+}
+
+.worker-li{
+    text-decoration: underline;
 }

@@ -27,7 +27,6 @@
     </table>
   </div>
   </div>
-  <hr></hr>
   {{#ifContains roles "MANAGER"}}
   <div class="row all-tasks-active">
     <h1>All active tasks</h1>
@@ -53,29 +52,6 @@
   </div>
 </div>
   <hr></hr>
-  <div class="row all-tasks-finished">
-    <h1>All finished tasks</h1>
-    <div class="table-responsive overflow">
-    <table class="table table-striped table-hover  table-condensed">
-      <thead class="thead-dark">
-        <tr>
-          <th class="col-sm-1">Project</th>
-          <th class="col-sm-9">Task</th>
-          <th class="col-sm-2">Deadline</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each completedTasks}}
-          <tr class='clickable-row' onclick="customLink('#/tasks/{{id}}')">
-            <td>{{projectName}}</td>
-            <td>{{info}}</td>
-            <td>{{deadline}}</td>
-          </tr>
-        {{/each}}
-      </tbody>
-    </table>
-  </div>
-</div>
   <hr></hr>
   {{/ifContains}}
 </div>

@@ -49,13 +49,15 @@
         <ul>
           <h4>Assigned workers:</h4>
           {{#each assignedWorkers}}
-          <li>{{this}}</li>
+
+          <li class="worker-li">{{this}}</li>
           {{/each}}
         </ul>
       </div>
     </div>
 
     <div class="row">
+    <div class="col-sm-12">
       <div class="col-sm-4">
 
       </div>
@@ -68,8 +70,12 @@
       <div class="col-sm-4">
         <a onclick="showField('noteAdder')" class="button">Add note</a>
       </div>
+      </div>
     </div>
 </div>
+  <div class="row note">
+      
+  </div>
 
 <div id="noteAdder">
   <form  class="form-horizontal col-sm-12 popuptext" action="#/addTaskNote/{{id}}" method="post">
@@ -82,7 +88,7 @@
         </div>
       </div>
     </div>
-    <input class="form-button" id="btnSubmit" value="Add Note" type="submit" onclick="showField('noteAdder')"/>
+    <input class="form-button" id="btnSubmit" value="Add Note" type="submit"/>
   </form>
 </div>
 

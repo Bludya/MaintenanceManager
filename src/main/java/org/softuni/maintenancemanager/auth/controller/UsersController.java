@@ -75,10 +75,16 @@ public class UsersController {
     }
 
     @GetMapping("/delete/{username}")
-
     public Object deleteUser(@PathVariable String username,
                            Authentication authentication) {
         this.userService.delete(authentication.getName(), username);
         return  "{\"success\": \"yes\"}";
+    }
+
+    @PostMapping("/change-role/{username}")
+    public UserViewModel changeRole(@PathVariable String username,
+                                    @RequestParam String role,
+                                    Authentication auth){
+        return this.userService.changeUserRole(auth.getName(), username, role);
     }
 }

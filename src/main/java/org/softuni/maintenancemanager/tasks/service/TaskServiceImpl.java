@@ -138,6 +138,7 @@ public class TaskServiceImpl implements TaskService{
 
         task.addNote(note);
 
+        this.repository.save(task);
         return this.mapTaskToViewModel(task);
     }
 

@@ -63,6 +63,26 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Set<ProjectViewModel> getActive() {
+        return this.projectRepository
+                .getAllByActiveTrueOrderByProjectNameDesc()
+                .stream()
+                .map(project -> {
+                    ProjectViewModel pvm = modelMapper.map(project, ProjectViewModel.class);
+                    if(project.getManager() != null) {
+                        pvm.setManager(project.getManager().getUsername());
+                    }
+                    if(project.getSystems() != null) {
+                        pvm.setSystems(project.getSystems().stream()
+                                .map(ProjectSystem::getName)
+                                .collect(Collectors.toSet()));
+                    }
+                    return pvm;
+                })
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public ProjectViewModel getByName(String name) {
         name = CharacterEscapes.escapeString(name);
 

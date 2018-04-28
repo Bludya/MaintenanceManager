@@ -31,7 +31,7 @@ $(() => {
       }
 
       loadPage(ctx, url);
-    })
+    });
 
     this.get('#/register', function (ctx){
       loadPage(ctx, '/users/register')
@@ -111,6 +111,10 @@ $(() => {
         username,
         password,
         function (data){
+            if(data.Authorization == null){
+                showError("Invalid username or password.")
+                return;
+            }
           auth.saveSession(data);
           ctx.redirect("#/profile");
         },
@@ -241,6 +245,36 @@ $(() => {
           $('#'+username).remove();
           // ctx.redirect('#/users');
         })
+    });
+
+    this.get('#/users/change-role/:username', function (ctx){
+        requester.get(
+            '/roles/all',
+            function funcThen(roles){
+                let select = $('#selectRole');
+                let form = $('#roleChangeForm');
+                let action = form.attr('action');
+                form.attr('action', action+ctx.params.username);
+
+                select.empty();
+                for (let role of roles) {
+                    select.append('<option>' + role + '</option>');
+                }
+
+                showField('roleChange');
+            }
+        )
+    })
+
+    this.post('#/users/change-role/:username', function (ctx) {
+        let role = ctx.params.role;
+        requester.post(
+            '/users/change-role/' + ctx.params.username,
+            {'role': role},
+            function funcThen(data){
+                ctx.redirect('#/users');
+            }
+        )
     })
 
     this.get('#/logs', function (ctx){
@@ -432,7 +466,7 @@ $(() => {
         function (myTasks){
           ctx.myTasks = myTasks;
 
-          if(!checkAccessible(ctx, "MANAGER")){
+          if(!sessionStorage.roles.includes('MANAGER')){
             loadPage(ctx, '/tasks/show');
             return;
           }
@@ -441,17 +475,7 @@ $(() => {
             '/tasks/completed/false',
             function (activeTasks){
               ctx.activeTasks = activeTasks;
-              requester.get(
-                '/tasks/completed/true',
-                function (completedTasks){
-                  ctx.completedTasks = completedTasks;
-                  loadPage(ctx, '/tasks/show');
-                },
-                function (error){
-                  loadPage(ctx, '/tasks/show');
-                  showError('Could not load finished tasks.')
-                }
-              )
+              loadPage(ctx, '/tasks/show');
             },
             function (error){
               loadPage(ctx, '/tasks/show');
@@ -475,7 +499,7 @@ $(() => {
         function thenFunc(users){
           ctx.users = users;
           requester.get(
-            '/projects/all',
+            '/projects/active/all',
             function thenFUnc(projects){
               ctx.projects = projects;
               loadPage(ctx, '/tasks/addTask')
@@ -571,7 +595,7 @@ $(() => {
         '/tasks/addNote',
         {
           'id': id,
-          'closingNote': closingNote
+          'note': note
         },
         function (){
           ctx.redirect('#/tasks');
@@ -581,4 +605,4 @@ $(() => {
     })
   });
   app.run();
-});
+})

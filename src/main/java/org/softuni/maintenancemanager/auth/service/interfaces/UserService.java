@@ -29,6 +29,8 @@ public interface UserService extends UserDetailsService {
 
     UserViewModel activateUser(String editor, String id);
 
+    UserViewModel changeUserRole(String editor, String userName, String role);
+
     void delete(String editor, String id);
 
     List<UserViewModel> getAllBySearchWordOrderedByActive(String searchWord);

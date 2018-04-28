@@ -14,7 +14,8 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             "\t  FROM tasks AS t\n" +
             "LEFT JOIN tasks_users AS tu ON t.id = tu.task_id\n" +
             "LEFT JOIN users AS u ON u.id = tu.user_id\n" +
-            "\t WHERE u.username = ?1", nativeQuery = true)
+            "\t  WHERE u.username = ?1" +
+            "\t   AND t.completed = false", nativeQuery = true)
     Set<Task> getForUser(String username);
 
 }

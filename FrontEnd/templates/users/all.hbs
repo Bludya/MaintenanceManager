@@ -10,7 +10,7 @@
               <th>Email</th>
               <th>Username</th>
               <th>Active</th>
-              <th>Roles</th>
+              <th>Role</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -21,7 +21,7 @@
                 <td>{{email}}</td>
                 <td>{{username}}</td>
                 <td id="active">{{enabled}}</td>
-                <td>{{roles}}</td>
+                <td><a href="#/users/change-role/{{username}}" class="button">{{roles}}</a></td>
                 <td>
                   <div class="buttons">
                   {{#if enabled}}
@@ -38,4 +38,20 @@
           </tbody>
         </table>
       </div>
+
+    <div id="roleChange">
+        <form  class="form-horizontal col-sm-12 popuptext" action="#/users/change-role/" id="roleChangeForm" method="post">
+            <span class="window-close col-sm-12" onclick="showField('roleChange')"><i class="fa fa-close"></i></span>
+            <div class="form-group col-sm-12">
+                <div class="form-group col-sm-12">
+                    <label for="selectManager" class="control-label col-sm-6">Select role:</label>
+                    <div class="col-sm-6">
+                        <select class="form-control"  name="role" id="selectRole">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <input class="form-button" id="btnSubmit" value="Change role" type="submit" onclick="showField('roleChange')"/>
+        </form>
+    </div>
 </section>
